@@ -1,244 +1,40 @@
-#!groovy
-
-//analyzer/pipeline-scripts/Jenkinsfile_Data_Analyzer_prbuilder.groovy
-
-/**
- * This script is triggered for PR Builder
- * It is invoked by specific comment issued by user on PRs
- * Comments for this script is "DATA_VALIDATE"
- * Identifies the changes in the PR and performs validations for the same
-*/
-
-//@Library("ccc-pipeline-utils") _
-
-//import GitUtils
-//import Constants
-//import println
-
-/** Specifying node on which current build would run */	
-node(NODE_LABEL)
+node("NODE_LABEL") 
 {
-	
-	
-	//def GitUtils = new GitUtils()
-	//def println = new println()
-	println.info("Entering PR Builder")
-	
-	//println.info("Build trigger by $ghprbTriggerAuthor using comment $ghprbCommentBody")
-	def mavenHome = tool(name: 'maven-3.5.0', type: 'maven');
-	def antHome = tool(name: 'ant-1.9.6', type: 'ant');
-	
-	final String buildNum = currentBuild.number.toString()
-	def currentModules
-	def stageName
-	def commitHash
-	def MiscUtils
-	def packagePathMap
-		
-	/** Stage to clone repo from git and setup environment for build */
-	stage("Git clone and setup")
-	{
-		try 
+def antHome
+def mavenHome
+		stage('SCM Checkout')
 		{
-			//println.info("Entering Git Clone and setup stage")
-			stageName = "Git clone and Setup"
-			checkout scm
-			moduleProp = readProperties file: 'pipeline-scripts/properties/modules.properties'
-			currentDir = pwd()
-			MiscUtils = load("${currentDir}/pipeline-scripts/utils/MiscUtils.groovy")
-			//println.info("Reading modules.properties : $moduleProp")
-			
-			// Get the commit hash of PR branch 
-			def branchCommit = sh( script: "git rev-parse refs/remotes/${sha1}^{commit}", returnStdout: true )
-			
-			// Get the commit hash of Master branch
-			def masterCommit = sh( script: "git rev-parse origin/${ghprbTargetBranch}^{commit}", returnStdout: true )
-			
-			commitHash =  sh( script: "git rev-parse origin/${env.GIT_BRANCH}",returnStdout: true, )
-			commitHash = commitHash.replaceAll("[\n\r]", "")
-			branchCommit = branchCommit.replaceAll("[\n\r]", "")
-			masterCommit = masterCommit.replaceAll("[\n\r]", "")
-			
-			def changeSet = MiscUtils.getChangeSet(branchCommit,masterCommit)
-			def changedModules = MiscUtils.getModifiedModules(changeSet)
-			def serviceModules = moduleProp['DATA_MODULES']
-			def serviceModulesList = serviceModules.split(',')
-			currentModules = MiscUtils.validateModules(changedModules,serviceModulesList)
-			println.info("Service modules changed : $currentModules")
-			MiscUtils.setDisplayName(buildNum, currentModules)
-			GitUtils.updatePrStatus(stageName,"success",commitHash)			
+				checkout scm
+			          //sh "mv ~/.m2 ~/.m2_backup1"
+			         // sh "rm -rf ~/.m2"
+			          //sh "mkdir ~/.m2"
+				//sh "rm -rf ~/.m2/repository/com/transerainc/"
+				//sh "cp /home/jenkins/workspace/data_adx_test/artifactory-settings.xml ~/.m2/settings.xml"
+				mavenHome = tool(name: 'maven-3.5.0', type: 'maven');
+                //antHome = tool(name: 'ant-1.9.6', type: 'ant');
 		}
-		catch(Exception exception)
-		{
-			currentBuild.result = "FAILURE"
-			println.error("Git Clone and setup failed : $exception")
-			GitUtils.updatePrStatus(stageName,"failure",commitHash)
-			throw exception
-		}
-		finally
-		{
-			println("Exiting Git Clone and setup stage")
-		}
-		
-	}
-	
-	/**
-	* Setting up Maven Environment for build and UT stage
-	* Stage to run UT's for changed modules
-	*/
 	
 	withEnv([
                 'MAVEN_HOME=' + mavenHome,
-				'ANT_HOME=' + antHome,
-                "PATH=${mavenHome}/bin:${antHome}/bin:${env.PATH}"
-		])  
-		{
-			stage ("Build and UTs")
-			{
-				try
-				{
-					println.info("Entering Build and UT's stage")
-					stageName = "Build and UTs"
-					def buildCommand = moduleProp['DATA_ANT_MODULES']
-					def buildCommandMap = MiscUtils.stringToMap(buildCommand)
-					def packagePath = moduleProp['DATA_PACKAGEPATH']
-					packagePathMap = MiscUtils.stringToMap(packagePath)
-					for(module in currentModules)
-					{
-						def packageBuildPath = MiscUtils.getBuildPath(packagePathMap,module)
-						def command = MiscUtils.getBuildCommand(buildCommandMap,module)
-						dir(packageBuildPath)
-						{
-							println.info("Running UTs for $module")
-							sh "$command"
-						}
-					}
-					GitUtils.updatePrStatus(stageName,"success",commitHash)
-				}
-				catch(Exception exception) 
-				{
-					currentBuild.result = "FAILURE"
-					println.error("Build and UT's failed : $exception")
-					GitUtils.updatePrStatus(stageName,"failure",commitHash)
-					throw exception
-				}
-				finally
-				{
-					println.info("Exiting Build and UTs stage")
-				}
-			} 
-		}
-		
-	/** Stage to invoke Static Code Analyzer SonarQube */	
-	
-	withEnv([
-                'MAVEN_HOME=' + mavenHome,
-				'ANT_HOME=' + antHome,
-                "PATH=${mavenHome}/bin:${antHome}/bin:${env.PATH}"
+		//'ANT_HOME=' + antHome,
+                "PATH=${mavenHome}/bin:${env.PATH}"
 		]) 
-	
-	{	
-		stage('Static Analysis') 
-		{
-			try
+	     {
+		stage('build & UT')
+		{       
+			dir("walmart")
 			{
-				println.info("Entering Static Analysis stage")
-				stageName = "Static Analysis"
-				def sonarBranchName = MiscUtils.getSonarBranchName(ghprbSourceBranch)
-				for (module in currentModules)
-					{   
-						def packageBuildPath = MiscUtils.getBuildPath(packagePathMap,module)
-						dir(packageBuildPath)
-						{
-							readMavenPom file: 'pom.xml'
-							artifactId = readMavenPom().getArtifactId()
-							groupId = readMavenPom().getGroupId()
-																			
-							def metricKeys = moduleProp['METRIC_KEYS']
-							def response								
-							withCredentials([ usernamePassword(credentialsId: "Gideal", usernameVariable: 'USER', passwordVariable: 'PASS')])
-							{
-								
-								def auth_key = "${USER}:${PASS}"
-								def auth_encoded = auth_key.bytes.encodeBase64().toString()
-								response = httpRequest consoleLogResponseBody: true,
-									customHeaders: [[name: 'Authorization', value: "Basic ${auth_encoded}"]],
-									httpMode: 'GET',
-									url:"${Constants.SONARQUBE_API_URL}measures/component?componentKey=${groupId}:${artifactId}&metricKeys=$metricKeys"
-							}
-							def preScanJson = MiscUtils.getSonarMetrics(response.content)
-							preScanJson = MiscUtils.stringToMap(preScanJson)
-							println.info("preScanJson : $preScanJson")
-							
-							withSonarQubeEnv('CJPSonar') 
-							{
-								// requires SonarQube Scanner for Maven 3.2+
-								sh "${mavenHome}/bin/mvn -Dsonar.branch.name=$sonarBranchName sonar:sonar"
-							}
-							println.info("Waiting for SonarQube Quality evaluation response")
-							timeout(time: 1, unit: 'HOURS')
-							{
-								// Wait for SonarQube analysis to be completed and return quality gate status
-								def quality = waitForQualityGate()
-								if(quality.status != 'OK')
-								{
-									println.error("Quality gate check failed")
-									throw new Exception("Quality Gate check failed")
-								}
-								println.info("Quality Gate check passed")
-							}
-							
-							
-							withCredentials([ usernamePassword(credentialsId: "Gideal", usernameVariable: 'USER', passwordVariable: 'PASS')])
-							{
-								
-								def auth_key = "${USER}:${PASS}"
-								def auth_encoded = auth_key.bytes.encodeBase64().toString()
-								response = httpRequest consoleLogResponseBody: true,
-									customHeaders: [[name: 'Authorization', value: "Basic ${auth_encoded}"]],
-									httpMode: 'GET',
-									url:"${Constants.SONARQUBE_API_URL}measures/component?branch=${sonarBranchName}&componentKey=${groupId}:${artifactId}&metricKeys=$metricKeys"
-							}
-							def postScanJson = MiscUtils.getSonarMetrics(response.content)
-							postScanJson = MiscUtils.stringToMap(postScanJson)
-							println.info("postScanJson : "+postScanJson)
-							def metricList = metricKeys.split(',')
-							for(metrics in metricList)
-							{
-								println.info("Sonar delta evaluation for following metric : "+metrics)
-								preScanValue = MiscUtils.getValueFromMap(preScanJson,metrics)
-								postScanValue = MiscUtils.getValueFromMap(postScanJson,metrics)
-								
-								sonarDelta = MiscUtils.sonarDelta(metrics,preScanValue, postScanValue)
-								if(!sonarDelta)
-								{
-									println.info("Pre Scan Value :" +preScanValue)
-									println.info("Post Scan Value :" +postScanValue)
-									println.info("Sonar Violation has increased. Aborting Build")
-									throw new Exception("Sonar Violation has increased")
-								}	
-							}
-										
-						}
-					}
-									
-					
-					GitUtils.updatePrStatus(stageName,"success",commitHash)
-			}
-		
-			catch(Exception exception) 
-			{
-				currentBuild.result = "FAILURE"
-				println.error("Static analysis failed : $exception")
-				GitUtils.updatePrStatus(stageName,"failure",commitHash)
-				throw exception
-			}
-			finally
-			{
-				println.info("Exting Static Analysis stage")
+				//sh "mvn install -s ~/.m2/settings.xml"  
+				sh "mvn clean install"
+				 //sh "ant tprime installer"
+				
+				
+//sh "ant adx"  	   ---> Build & UT's 
+//sh "ant installer" ---> Packaging
+
 			}
 		}
-	}
-	println.info("Exiting PR Builder")
-}
 
+	}
+}
+//
