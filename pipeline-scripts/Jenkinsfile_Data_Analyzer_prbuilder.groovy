@@ -12,7 +12,7 @@ def mavenHome = tool 'maven';
 			]) 
 		stage('build & UT')
 		{       
-			ws dir("walmart")
+			dir("walmart")
 			{
 				sh "mvn clean install"
 			}
