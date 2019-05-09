@@ -9,7 +9,7 @@
  * Identifies the changes in the PR and performs validations for the same
 */
 
-@Library("ccc-pipeline-utils") _
+//@Library("ccc-pipeline-utils") _
 
 //import GitUtils
 //import Constants
