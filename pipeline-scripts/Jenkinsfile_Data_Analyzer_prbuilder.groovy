@@ -12,8 +12,9 @@ def mavenHome = tool 'maven';
 			]) 
 		stage('build & UT')
 		{       
-				sh "cd /home/rameshrangaswamy1/.jenkins/workspace/PR_PHASE_1"
+			dir('walmart'){
 				sh "mvn clean install"
+			}
 		}
 
 }
