@@ -13,7 +13,7 @@
 
 //import GitUtils
 //import Constants
-//import Logger
+//import println
 
 /** Specifying node on which current build would run */	
 node(NODE_LABEL)
@@ -21,10 +21,10 @@ node(NODE_LABEL)
 	
 	
 	//def GitUtils = new GitUtils()
-	//def Logger = new Logger()
-	Logger.info("Entering PR Builder")
+	//def println = new println()
+	println.info("Entering PR Builder")
 	
-	//Logger.info("Build trigger by $ghprbTriggerAuthor using comment $ghprbCommentBody")
+	//println.info("Build trigger by $ghprbTriggerAuthor using comment $ghprbCommentBody")
 	def mavenHome = tool(name: 'maven-3.5.0', type: 'maven');
 	def antHome = tool(name: 'ant-1.9.6', type: 'ant');
 	
@@ -40,13 +40,13 @@ node(NODE_LABEL)
 	{
 		try 
 		{
-			//Logger.info("Entering Git Clone and setup stage")
+			//println.info("Entering Git Clone and setup stage")
 			stageName = "Git clone and Setup"
 			checkout scm
 			moduleProp = readProperties file: 'pipeline-scripts/properties/modules.properties'
 			currentDir = pwd()
 			MiscUtils = load("${currentDir}/pipeline-scripts/utils/MiscUtils.groovy")
-			//Logger.info("Reading modules.properties : $moduleProp")
+			//println.info("Reading modules.properties : $moduleProp")
 			
 			// Get the commit hash of PR branch 
 			def branchCommit = sh( script: "git rev-parse refs/remotes/${sha1}^{commit}", returnStdout: true )
@@ -64,7 +64,7 @@ node(NODE_LABEL)
 			def serviceModules = moduleProp['DATA_MODULES']
 			def serviceModulesList = serviceModules.split(',')
 			currentModules = MiscUtils.validateModules(changedModules,serviceModulesList)
-			Logger.info("Service modules changed : $currentModules")
+			println.info("Service modules changed : $currentModules")
 			MiscUtils.setDisplayName(buildNum, currentModules)
 			GitUtils.updatePrStatus(stageName,"success",commitHash)			
 		}
@@ -97,7 +97,7 @@ node(NODE_LABEL)
 			{
 				try
 				{
-					Logger.info("Entering Build and UT's stage")
+					println.info("Entering Build and UT's stage")
 					stageName = "Build and UTs"
 					def buildCommand = moduleProp['DATA_ANT_MODULES']
 					def buildCommandMap = MiscUtils.stringToMap(buildCommand)
@@ -109,7 +109,7 @@ node(NODE_LABEL)
 						def command = MiscUtils.getBuildCommand(buildCommandMap,module)
 						dir(packageBuildPath)
 						{
-							Logger.info("Running UTs for $module")
+							println.info("Running UTs for $module")
 							sh "$command"
 						}
 					}
@@ -118,13 +118,13 @@ node(NODE_LABEL)
 				catch(Exception exception) 
 				{
 					currentBuild.result = "FAILURE"
-					Logger.error("Build and UT's failed : $exception")
+					println.error("Build and UT's failed : $exception")
 					GitUtils.updatePrStatus(stageName,"failure",commitHash)
 					throw exception
 				}
 				finally
 				{
-					Logger.info("Exiting Build and UTs stage")
+					println.info("Exiting Build and UTs stage")
 				}
 			} 
 		}
@@ -142,7 +142,7 @@ node(NODE_LABEL)
 		{
 			try
 			{
-				Logger.info("Entering Static Analysis stage")
+				println.info("Entering Static Analysis stage")
 				stageName = "Static Analysis"
 				def sonarBranchName = MiscUtils.getSonarBranchName(ghprbSourceBranch)
 				for (module in currentModules)
@@ -168,24 +168,24 @@ node(NODE_LABEL)
 							}
 							def preScanJson = MiscUtils.getSonarMetrics(response.content)
 							preScanJson = MiscUtils.stringToMap(preScanJson)
-							Logger.info("preScanJson : $preScanJson")
+							println.info("preScanJson : $preScanJson")
 							
 							withSonarQubeEnv('CJPSonar') 
 							{
 								// requires SonarQube Scanner for Maven 3.2+
 								sh "${mavenHome}/bin/mvn -Dsonar.branch.name=$sonarBranchName sonar:sonar"
 							}
-							Logger.info("Waiting for SonarQube Quality evaluation response")
+							println.info("Waiting for SonarQube Quality evaluation response")
 							timeout(time: 1, unit: 'HOURS')
 							{
 								// Wait for SonarQube analysis to be completed and return quality gate status
 								def quality = waitForQualityGate()
 								if(quality.status != 'OK')
 								{
-									Logger.error("Quality gate check failed")
+									println.error("Quality gate check failed")
 									throw new Exception("Quality Gate check failed")
 								}
-								Logger.info("Quality Gate check passed")
+								println.info("Quality Gate check passed")
 							}
 							
 							
@@ -201,20 +201,20 @@ node(NODE_LABEL)
 							}
 							def postScanJson = MiscUtils.getSonarMetrics(response.content)
 							postScanJson = MiscUtils.stringToMap(postScanJson)
-							Logger.info("postScanJson : "+postScanJson)
+							println.info("postScanJson : "+postScanJson)
 							def metricList = metricKeys.split(',')
 							for(metrics in metricList)
 							{
-								Logger.info("Sonar delta evaluation for following metric : "+metrics)
+								println.info("Sonar delta evaluation for following metric : "+metrics)
 								preScanValue = MiscUtils.getValueFromMap(preScanJson,metrics)
 								postScanValue = MiscUtils.getValueFromMap(postScanJson,metrics)
 								
 								sonarDelta = MiscUtils.sonarDelta(metrics,preScanValue, postScanValue)
 								if(!sonarDelta)
 								{
-									Logger.info("Pre Scan Value :" +preScanValue)
-									Logger.info("Post Scan Value :" +postScanValue)
-									Logger.info("Sonar Violation has increased. Aborting Build")
+									println.info("Pre Scan Value :" +preScanValue)
+									println.info("Post Scan Value :" +postScanValue)
+									println.info("Sonar Violation has increased. Aborting Build")
 									throw new Exception("Sonar Violation has increased")
 								}	
 							}
@@ -229,16 +229,16 @@ node(NODE_LABEL)
 			catch(Exception exception) 
 			{
 				currentBuild.result = "FAILURE"
-				Logger.error("Static analysis failed : $exception")
+				println.error("Static analysis failed : $exception")
 				GitUtils.updatePrStatus(stageName,"failure",commitHash)
 				throw exception
 			}
 			finally
 			{
-				Logger.info("Exting Static Analysis stage")
+				println.info("Exting Static Analysis stage")
 			}
 		}
 	}
-	Logger.info("Exiting PR Builder")
+	println.info("Exiting PR Builder")
 }
 
