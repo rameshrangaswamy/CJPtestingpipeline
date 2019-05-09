@@ -8,7 +8,7 @@ def mavenHome = tool 'maven';
 		stage('build & UT')
 		{       
 			dir('walmart'){
-				sh "mvn clean install"
+				sh "'${mavenHome}/bin/mvn' clean package"
 			}
 		}
 
