@@ -11,20 +11,20 @@
 
 @Library("ccc-pipeline-utils") _
 
-import GitUtils
-import Constants
-import Logger
+//import GitUtils
+//import Constants
+//import Logger
 
 /** Specifying node on which current build would run */	
 node(NODE_LABEL)
 {
 	
 	
-	def GitUtils = new GitUtils()
-	def Logger = new Logger()
+	//def GitUtils = new GitUtils()
+	//def Logger = new Logger()
 	Logger.info("Entering PR Builder")
 	
-	Logger.info("Build trigger by $ghprbTriggerAuthor using comment $ghprbCommentBody")
+	//Logger.info("Build trigger by $ghprbTriggerAuthor using comment $ghprbCommentBody")
 	def mavenHome = tool(name: 'maven-3.5.0', type: 'maven');
 	def antHome = tool(name: 'ant-1.9.6', type: 'ant');
 	
@@ -40,13 +40,13 @@ node(NODE_LABEL)
 	{
 		try 
 		{
-			Logger.info("Entering Git Clone and setup stage")
+			//Logger.info("Entering Git Clone and setup stage")
 			stageName = "Git clone and Setup"
 			checkout scm
 			moduleProp = readProperties file: 'pipeline-scripts/properties/modules.properties'
 			currentDir = pwd()
 			MiscUtils = load("${currentDir}/pipeline-scripts/utils/MiscUtils.groovy")
-			Logger.info("Reading modules.properties : $moduleProp")
+			//Logger.info("Reading modules.properties : $moduleProp")
 			
 			// Get the commit hash of PR branch 
 			def branchCommit = sh( script: "git rev-parse refs/remotes/${sha1}^{commit}", returnStdout: true )
@@ -71,13 +71,13 @@ node(NODE_LABEL)
 		catch(Exception exception)
 		{
 			currentBuild.result = "FAILURE"
-			Logger.error("Git Clone and setup failed : $exception")
+			println.error("Git Clone and setup failed : $exception")
 			GitUtils.updatePrStatus(stageName,"failure",commitHash)
 			throw exception
 		}
 		finally
 		{
-			Logger.info("Exiting Git Clone and setup stage")
+			println("Exiting Git Clone and setup stage")
 		}
 		
 	}
