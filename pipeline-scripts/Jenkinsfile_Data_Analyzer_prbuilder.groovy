@@ -1,11 +1,9 @@
 node("NODE_LABEL") 
 {
-def antHome
-def mavenHome
+def mavenHome = tool 'maven'
 		stage('SCM Checkout')
 		{
 			checkout scm
-			mavenHome = tool('maven');
 		}
 	
 	withEnv([
