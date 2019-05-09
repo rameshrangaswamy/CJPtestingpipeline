@@ -1,6 +1,6 @@
 node("NODE_LABEL") 
 {
-def mavenHome = tool 'maven'
+def mavenHome = tool 'maven';
 		stage('SCM Checkout')
 		{
 			checkout scm
@@ -12,12 +12,14 @@ def mavenHome = tool 'maven'
 			]) 
 		stage('build & UT')
 		{       
-			dir("walmart")
+			ws dir("walmart")
 			{
 				sh "mvn clean install"
 			}
 		}
 
 }
+
+
 
 
