@@ -5,11 +5,6 @@ def mavenHome = tool 'maven';
 		{
 			checkout scm
 		}
-	
-	withEnv([
-                'MAVEN_HOME=' + mavenHome,
-                "PATH=${mavenHome}/bin:${env.PATH}"
-			]) 
 		stage('build & UT')
 		{       
 			dir('walmart'){
