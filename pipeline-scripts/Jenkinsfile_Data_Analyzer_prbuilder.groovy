@@ -41,13 +41,15 @@ String buildNum = currentBuild.number.toString()
 		}
 		stage('build & UT')
 		{       
-			dir('walmart'){
+			for(module in currentModules)
+			{
 				sh "'${mavenHome}/bin/mvn' clean package"
 			}
 		}
 		stage('sonarAnalysis')
 		{       
-			dir('walmart'){
+			for(module in currentModules)
+			{
 				withSonarQubeEnv('SonarDemo') {
 				sh "'${mavenHome}/bin/mvn' sonar:sonar"
   					//-Dsonar.host.url=http://35.200.203.119:9000 \
