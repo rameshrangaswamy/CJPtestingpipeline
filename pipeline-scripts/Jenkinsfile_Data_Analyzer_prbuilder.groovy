@@ -1,10 +1,11 @@
 #!groovy
 
-def mavenHome = tool 'maven'
-def currentDir
+
 /** Specifying node on which current build would run */
 node("NODE_LABEL") 
 {
+def mavenHome = tool 'maven'
+def currentDir
 		stage('Git clone and setup')
 		{
 			stageName = "Git clone and setup"
