@@ -9,7 +9,6 @@ def currentDir
 def stageName
 def commitHash 
 def currentModules
-def moduleProp
 String buildNum = currentBuild.number.toString()
 	
 		stage('Git clone and setup')
@@ -44,6 +43,7 @@ String buildNum = currentBuild.number.toString()
 		{       
 			for(module in currentModules)
 			{
+				def moduleProp = readProperties file: 'pipeline-scripts/properties/modules.properties'
 				def packagePath = moduleProp['CJP_PACKAGEPATH']
 				packagePathMap = MiscUtils.stringToMap(packagePath)
 				dir(packagePathMap)
