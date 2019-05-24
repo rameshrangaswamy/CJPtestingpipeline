@@ -14,9 +14,11 @@ def mavenHome = tool 'maven';
 			stage('sonarAnalysis')
 		{       
 			dir('walmart'){
-				sh "'${mavenHome}/bin/mvn' sonar:sonar \
-  					-Dsonar.host.url=http://35.200.203.119:9000 \
-  					-Dsonar.login=bc7ed6c23eabd5e5001bcc733194bf9925c85efc"
+				withSonarQubeEnv('SonarDemo') {
+				sh "'${mavenHome}/bin/mvn' sonar:sonar"
+  					//-Dsonar.host.url=http://35.200.203.119:9000 \
+  					//-Dsonar.login=bc7ed6c23eabd5e5001bcc733194bf9925c85efc"
+				}
 			}
 		}
 
