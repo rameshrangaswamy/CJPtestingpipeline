@@ -50,7 +50,7 @@ String buildNum = currentBuild.number.toString()
 				println("packagePathMap : $packagePathMap")
 				def packageBuildPath = MiscUtils.getBuildPath(packagePathMap,module)
 				//def command = MiscUtils.getBuildCommand(buildCommandMap,module)
-				dir(packageBuildPath
+				dir(packageBuildPath)
 				{
 					sh "'${mavenHome}/bin/mvn' clean package"
 				}
