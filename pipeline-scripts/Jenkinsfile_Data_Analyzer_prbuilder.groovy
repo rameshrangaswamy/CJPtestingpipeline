@@ -43,7 +43,7 @@ String buildNum = currentBuild.number.toString()
 		{       
 			for(module in currentModules)
 			{
-				dir(currentModules)
+				dir($currentModules)
 				{
 					sh "'${mavenHome}/bin/mvn' clean package"
 				}
@@ -53,7 +53,7 @@ String buildNum = currentBuild.number.toString()
 		{       
 			for(module in currentModules)
 			{
-				dir(currentModules)
+				dir($currentModules)
 				{
 				withSonarQubeEnv('SonarDemo') {
 				sh "'${mavenHome}/bin/mvn' sonar:sonar"
