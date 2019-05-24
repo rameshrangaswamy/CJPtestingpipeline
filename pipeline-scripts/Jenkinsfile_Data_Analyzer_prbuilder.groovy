@@ -43,13 +43,18 @@ String buildNum = currentBuild.number.toString()
 		{       
 			for(module in currentModules)
 			{
-				sh "'${mavenHome}/bin/mvn' clean package"
+				dir(currentModules)
+				{
+					sh "'${mavenHome}/bin/mvn' clean package"
+				}
 			}
 		}
 		stage('sonarAnalysis')
 		{       
 			for(module in currentModules)
 			{
+				dir(currentModules)
+				{
 				withSonarQubeEnv('SonarDemo') {
 				sh "'${mavenHome}/bin/mvn' sonar:sonar"
   					//-Dsonar.host.url=http://35.200.203.119:9000 \
@@ -66,6 +71,7 @@ String buildNum = currentBuild.number.toString()
 				}
 				printlin("Quality Gate Checks passed ")
 				}*/
+				}
 			}
 		}
 	}
