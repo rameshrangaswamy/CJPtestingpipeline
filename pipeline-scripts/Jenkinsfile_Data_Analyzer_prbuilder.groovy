@@ -9,6 +9,8 @@ def currentDir
 def stageName
 def commitHash 
 def currentModules
+def moduleProp
+String buildNum = currentBuild.number.toString()
 	
 		stage('Git clone and setup')
 		{
@@ -40,13 +42,22 @@ def currentModules
 		}
 		stage('build & UT')
 		{       
-			dir('walmart'){
-				sh "'${mavenHome}/bin/mvn' clean package"
+			for(module in currentModules)
+			{
+				def packagePath = moduleProp['CJP_PACKAGEPATH']
+				packagePathMap = MiscUtils.stringToMap(packagePath)
+				dir(packagePathMap)
+				{
+					sh "'${mavenHome}/bin/mvn' clean package"
+				}
 			}
 		}
 		stage('sonarAnalysis')
 		{       
-			dir('walmart'){
+			for(module in currentModules)
+			{
+				dir($currentModules)
+				{
 				withSonarQubeEnv('SonarDemo') {
 				sh "'${mavenHome}/bin/mvn' sonar:sonar"
   					//-Dsonar.host.url=http://35.200.203.119:9000 \
@@ -63,12 +74,9 @@ def currentModules
 				}
 				printlin("Quality Gate Checks passed ")
 				}*/
+				}
 			}
 		}
 	}
 
 }
-
-
-
-
