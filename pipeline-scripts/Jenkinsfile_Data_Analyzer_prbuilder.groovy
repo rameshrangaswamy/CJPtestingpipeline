@@ -6,6 +6,8 @@ node("NODE_LABEL")
 {
 def mavenHome = tool 'maven'
 def currentDir
+def stageName
+def commitHash 
 		stage('Git clone and setup')
 		{
 			stageName = "Git clone and setup"
@@ -14,6 +16,20 @@ def currentDir
 			currentDir = pwd()
 			MiscUtils = load("${currentDir}/pipeline-scripts/utils/MiscUtils.groovy")
 			println("Reading modules.properties : $moduleProp")
+			// Get the commit hash of PR branch 
+			def branchCommit = sh( script: "git rev-parse refs/remotes/${sha1}^{commit}", returnStdout: true )
+			
+			// Get the commit hash of Master branch
+			def masterCommit = sh( script: "git rev-parse origin/${ghprbTargetBranch}^{commit}", returnStdout: true )
+			
+			commitHash =  sh( script: "git rev-parse origin/${env.GIT_BRANCH}",returnStdout: true, )
+			commitHash = commitHash.replaceAll("[\n\r]", "")
+			branchCommit = branchCommit.replaceAll("[\n\r]", "")
+			masterCommit = masterCommit.replaceAll("[\n\r]", "")
+			println("branchCommit : $branchCommit")
+			println("masterCommit : $masterCommit")
+			
+			
 		}
 		stage('build & UT')
 		{       
