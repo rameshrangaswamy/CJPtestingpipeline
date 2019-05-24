@@ -10,7 +10,7 @@ def currentDir
 		{
 			stageName = "Git clone and setup"
 			checkout scm
-			moduleProp = readProperties file: 'pipeline-scripts/properties/modules.properties'
+			def moduleProp = readProperties file: 'pipeline-scripts/properties/modules.properties'
 			currentDir = pwd()
 			MiscUtils = load("${currentDir}/pipeline-scripts/utils/MiscUtils.groovy")
 			println("Reading modules.properties : $moduleProp")
