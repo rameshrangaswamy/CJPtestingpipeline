@@ -45,7 +45,9 @@ String buildNum = currentBuild.number.toString()
 			{
 				def moduleProp = readProperties file: 'pipeline-scripts/properties/modules.properties'
 				def packagePath = moduleProp['CJP_PACKAGEPATH']
+				println("packagePath : $packagePath")
 				packagePathMap = MiscUtils.stringToMap(packagePath)
+				println("packagePathMap : $packagePathMap")
 				dir(packagePathMap)
 				{
 					sh "'${mavenHome}/bin/mvn' clean package"
