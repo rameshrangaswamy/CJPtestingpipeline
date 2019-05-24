@@ -43,7 +43,9 @@ String buildNum = currentBuild.number.toString()
 		{       
 			for(module in currentModules)
 			{
-				dir($currentModules)
+				def packagePath = moduleProp['CJP_PACKAGEPATH']
+				packagePathMap = MiscUtils.stringToMap(packagePath)
+				dir(packagePathMap)
 				{
 					sh "'${mavenHome}/bin/mvn' clean package"
 				}
