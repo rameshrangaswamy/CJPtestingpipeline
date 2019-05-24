@@ -9,6 +9,7 @@ def currentDir
 def stageName
 def commitHash 
 def currentModules
+String buildNum = currentBuild.number.toString()
 	
 		stage('Git clone and setup')
 		{
