@@ -8,6 +8,8 @@ def mavenHome = tool 'maven'
 def currentDir
 def stageName
 def commitHash 
+def currentModules
+	
 		stage('Git clone and setup')
 		{
 			stageName = "Git clone and setup"
@@ -28,8 +30,13 @@ def commitHash
 			masterCommit = masterCommit.replaceAll("[\n\r]", "")
 			println("branchCommit : $branchCommit")
 			println("masterCommit : $masterCommit")
-			
-			
+			def changeSet = MiscUtils.getChangeSet(branchCommit,masterCommit)
+			def changedModules = MiscUtils.getModifiedModules(changeSet)
+			def serviceModules = moduleProp['CJP_MODULES']
+			def serviceModulesList = serviceModules.split(',')
+			currentModules = MiscUtils.validateModules(changedModules,serviceModulesList)
+			println("Service modules changed : $currentModules")			
+			MiscUtils.setDisplayName(buildNum, currentModules)
 		}
 		stage('build & UT')
 		{       
