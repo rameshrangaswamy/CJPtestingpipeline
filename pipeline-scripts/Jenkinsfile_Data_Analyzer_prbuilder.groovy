@@ -60,7 +60,14 @@ String buildNum = currentBuild.number.toString()
 		{       
 			for(module in currentModules)
 			{
-				dir($currentModules)
+				def moduleProp = readProperties file: 'pipeline-scripts/properties/modules.properties'
+				def packagePath = moduleProp['CJP_PACKAGEPATH']
+				//println("packagePath : $packagePath")
+				packagePathMap = MiscUtils.stringToMap(packagePath)
+				//println("packagePathMap : $packagePathMap")
+				def packageBuildPath = MiscUtils.getBuildPath(packagePathMap,module)
+				//def command = MiscUtils.getBuildCommand(buildCommandMap,module)
+				dir(packageBuildPath)
 				{
 				withSonarQubeEnv('SonarDemo') {
 				sh "'${mavenHome}/bin/mvn' sonar:sonar"
