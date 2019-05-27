@@ -108,9 +108,11 @@ String buildNum = currentBuild.number.toString()
 					for(module in currentModules) 
 					{
 						def packageName = MiscUtils.getValueFromMap(packageMap,module)
-						def moduleTarPath = MiscUtils.getTarPath(tarPathMap,module)											
+						def moduleTarPath = MiscUtils.getTarPath(tarPathMap,module)	
+						println("moduleTarPath : $moduleTarPath")
 						dir(moduleTarPath)
 						{
+							sh "pwd"
 							sh"""
 							#!/bin/bash
 							tar cvf "${packageName}-${gitCommit}-b${buildNum}.tar" "$packageName"
