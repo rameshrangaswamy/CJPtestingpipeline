@@ -113,7 +113,7 @@ String buildNum = currentBuild.number.toString()
 						{
 							sh"""
 							#!/bin/bash
-							tar cvf "${packageName}-${gitCommit}-b${buildNum}.tar" "$moduleTarPath/"
+							tar cvf "${packageName}-${gitCommit}-b${buildNum}.tar" "$moduleTarPath"
 							"""
 							CjpArtifactoryUtils.publishCcOneAppPackageMaster(CjpConstants.ARTIFACTORY_REPO, packageName, buildNum)
 						}
