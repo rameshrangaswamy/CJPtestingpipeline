@@ -317,7 +317,7 @@ def getTarPath(tarPathMap,module)
 	}
 	else
 	{
-		def suffix = "/packages/"
+		def suffix = "/target/"
 		def path = "${module}${suffix}"
 		return path
 	}
