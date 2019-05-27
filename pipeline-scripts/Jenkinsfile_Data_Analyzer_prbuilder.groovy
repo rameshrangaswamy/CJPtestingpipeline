@@ -92,6 +92,7 @@ String buildNum = currentBuild.number.toString()
 			stage('Publish to Artifactory') 
 			{
 					println("Entering stage Publish to Artifactory")
+					def moduleProp = readProperties file: 'pipeline-scripts/properties/modules.properties'
 					stageName = "Publish to artifactory"
 					def packageNames = moduleProp['PACKAGE_NAME']
 					packageMap = MiscUtils.stringToMap(packageNames)
