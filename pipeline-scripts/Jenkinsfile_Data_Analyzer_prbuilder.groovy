@@ -108,5 +108,7 @@ String buildNum = currentBuild.number.toString()
 							tar cvf "${packageName}-${gitCommit}-b${buildNum}.tar" "$packageName"
 							"""
 							CjpArtifactoryUtils.publishCcOneAppPackageMaster(CjpConstants.ARTIFACTORY_REPO, packageName, buildNum)
-
+						}
+					}
+			}
 }
