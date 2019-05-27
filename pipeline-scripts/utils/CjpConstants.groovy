@@ -2,7 +2,7 @@
 
 class CjpConstants {    
 
-static final String ARTIFACTORY_REPO = 'cjp-release'
+static final String ARTIFACTORY_REPO = 'ArtifactDemo'
 
 }
 
