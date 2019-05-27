@@ -89,5 +89,24 @@ String buildNum = currentBuild.number.toString()
 			}
 		}
 	}
+			stage('Publish to Artifactory') 
+			{
+					println("Entering stage Publish to Artifactory")
+					stageName = "Publish to artifactory"
+					def packageNames = moduleProp['PACKAGE_NAME']
+					packageMap = MiscUtils.stringToMap(packageNames)
+					tarPath = moduleProp['TAR_PATH']
+					def tarPathMap = MiscUtils.stringToMap(tarPath)				
+					for(module in currentModules) 
+					{
+						def packageName = MiscUtils.getValueFromMap(packageMap,module)
+						def moduleTarPath = MiscUtils.getTarPath(tarPathMap,module)											
+						dir(moduleTarPath)
+						{
+							sh"""
+							#!/bin/bash
+							tar cvf "${packageName}-${gitCommit}-b${buildNum}.tar" "$packageName"
+							"""
+							CjpArtifactoryUtils.publishCcOneAppPackageMaster(CjpConstants.ARTIFACTORY_REPO, packageName, buildNum)
 
 }
