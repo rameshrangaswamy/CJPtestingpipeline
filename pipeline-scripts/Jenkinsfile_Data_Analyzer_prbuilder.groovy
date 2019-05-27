@@ -9,6 +9,7 @@ def currentDir
 def stageName
 def commitHash 
 def currentModules
+def gitCommit
 String buildNum = currentBuild.number.toString()
 	
 		stage('Git clone and setup')
@@ -92,7 +93,13 @@ String buildNum = currentBuild.number.toString()
 			stage('Publish to Artifactory') 
 			{
 					println("Entering stage Publish to Artifactory")
-					def moduleProp = readProperties file: 'pipeline-scripts/properties/modules.properties'
+					currentDir = pwd()
+					CjpArtifactoryUtils = load("${currentDir}/pipeline-scripts/utils/CjpArtifactoryUtils.groovy")
+					CjpConstants = load("${currentDir}/pipeline-scripts/utils/CjpConstants.groovy")
+					MiscUtils = load("${currentDir}/pipeline-scripts/utils/MiscUtils.groovy")
+					moduleProp = readProperties file: 'pipeline-scripts/properties/modules.properties'				
+					commitHash =  sh( script: "git rev-parse ${commitBranch}", returnStdout: true )
+					gitCommit = commitHash.substring(0,7)
 					stageName = "Publish to artifactory"
 					def packageNames = moduleProp['PACKAGE_NAME']
 					packageMap = MiscUtils.stringToMap(packageNames)
