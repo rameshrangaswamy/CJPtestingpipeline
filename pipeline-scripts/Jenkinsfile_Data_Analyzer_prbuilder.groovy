@@ -79,15 +79,15 @@ def buildInfo
   					//-Dsonar.host.url=http://35.200.203.119:9000 \
   					//-Dsonar.login=bc7ed6c23eabd5e5001bcc733194bf9925c85efc"
 			
-			timeout(time: 1, unit: 'HOURS')
-			{
+			//timeout(time: 1, unit: 'HOURS')
+			//{
 				// Wait for SonarQube analysis to be completed and return quality gate status
 				      def qualitygate = waitForQualityGate()
 				      if (qualitygate.status != "OK") {
 					 error "Pipeline aborted due to quality gate coverage failure: ${qualitygate.status}"
 				      }
 					printlin("Quality Gate Checks passed ")
-				}
+				//}
 					
 				}
 			}
