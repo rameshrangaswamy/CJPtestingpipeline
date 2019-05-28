@@ -11,6 +11,9 @@ def commitHash
 def currentModules
 def gitCommit
 String buildNum = currentBuild.number.toString()
+def server = Artifactory.server 'ArtifactDemo'
+def rtMaven = Artifacory.newMavenBuild()
+def buildInfo
 	
 		stage('Git clone and setup')
 		{
@@ -104,7 +107,8 @@ String buildNum = currentBuild.number.toString()
 					def packageNames = moduleProp['PACKAGE_NAME']
 					packageMap = MiscUtils.stringToMap(packageNames)
 					tarPath = moduleProp['TAR_PATH']
-					def tarPathMap = MiscUtils.stringToMap(tarPath)				
+					def tarPathMap = MiscUtils.stringToMap(tarPath)
+					rtMaven.deployer
 					for(module in currentModules) 
 					{
 						def packageName = MiscUtils.getValueFromMap(packageMap,module)
@@ -115,7 +119,14 @@ String buildNum = currentBuild.number.toString()
 							#!/bin/bash
 							tar cvf "${packageName}-${gitCommit}-b${buildNum}.tar" *
 							"""
-							CjpArtifactoryUtils.publishCcOneAppPackageMaster(CjpConstants.ARTIFACTORY_REPO, packageName, buildNum)
+						script{
+							//rtMaven.resolver server: server, repo: 'gradle-dev-local'
+							rtMaven.deployer server: server, repo: 'libs-snapshot-local'
+							rtMaven.useWrapper = true
+							rtMaven.run pom: '/home/rameshrangaswamy1/.jenkins/workspace/PR_PHASE_1/$currentModules/pom.xml', goals: clean install, buildInfo: buildInfor
+							server.publishBuildInfo buildInfo
+							}
+							//CjpArtifactoryUtils.publishCcOneAppPackageMaster(CjpConstants.ARTIFACTORY_REPO, packageName, buildNum)
 						}
 					}
 			}
