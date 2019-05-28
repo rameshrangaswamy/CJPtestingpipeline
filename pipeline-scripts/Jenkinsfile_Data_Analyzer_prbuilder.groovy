@@ -108,7 +108,7 @@ def buildInfo
 					packageMap = MiscUtils.stringToMap(packageNames)
 					tarPath = moduleProp['TAR_PATH']
 					def tarPathMap = MiscUtils.stringToMap(tarPath)
-					rtMaven.deployer
+					//rtMaven.deployer
 					for(module in currentModules) 
 					{
 						def packageName = MiscUtils.getValueFromMap(packageMap,module)
