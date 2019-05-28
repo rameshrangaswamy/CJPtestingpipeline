@@ -114,7 +114,7 @@ def buildInfo
 					{
 						def packageName = MiscUtils.getValueFromMap(packageMap,module)
 						def moduleTarPath = MiscUtils.getTarPath(tarPathMap,module)	
-						//println("packageName : $packageName")
+						println("packageName : $packageName")
 						dir(moduleTarPath)
 						{
 							sh"""
