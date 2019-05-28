@@ -112,26 +112,23 @@ def buildInfo
 					for(module in currentModules) 
 					{
 						def packageName = MiscUtils.getValueFromMap(packageMap,module)
-						def moduleTarPath = MiscUtils.getTarPath(tarPathMap,module)	
-						println("moduleTarPath : $moduleTarPath")
+						def moduleTarPath = MiscUtils.getTarPath(tarPathMap,module)											
 						dir(moduleTarPath)
 						{
-							sh "pwd"
 							sh"""
 							#!/bin/bash
 							tar cvf "${packageName}-${gitCommit}-b${buildNum}.tar" *
 							"""
 						}
 						script{
-							//rtMaven.deployer releaseRepo: 'libs-release-local', snapshotRepo: 'libs-snapshot-local', server: server
-							//rtMaven.resolver releaseRepo: 'libs-release', snapshotRepo: 'libs-snapshot', server: server
+							//rtMaven.resolver server: server, repo: 'gradle-dev-local'
+							rtMaven.deployer server: server, snapshotRepo: 'libs-snapshot'
 							//rtMaven.deployer.artifactDeploymentPatterns.addExclude("pom.xml")
-							rtMaven.deployer server: server, snapshotRepo: 'libs-snapshot-local'
 							buildInfo = Artifactory.newBuildInfo()
 							buildInfo.env.capture = true
 							def uploadSpec = """{
 						    				"files": [{
-										"pattern": "$packageName*.tar",
+										"pattern": "${packageName}-${gitCommit}-b${buildNum}.tar",
 						       				"target": "/home/rameshrangaswamy1/.jenkins/workspace/PR_PHASE_1/$currentModules/"
 						    					  }]
 						 			 }"""
