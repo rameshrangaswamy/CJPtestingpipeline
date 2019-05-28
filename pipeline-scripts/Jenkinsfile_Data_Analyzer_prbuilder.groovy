@@ -136,10 +136,9 @@ def buildInfo
 			}
 			stage('publish build info')
 			{
-				steps{
-					script{
-						server.publishBuildInfo buildInfo
-					}
-		}
+			
+				script{
+					server.publishBuildInfo buildInfo
+				      }
 	}
 }
