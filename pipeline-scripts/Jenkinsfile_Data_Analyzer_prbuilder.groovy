@@ -122,13 +122,13 @@ def buildInfo
 						}
 						script{
 							//rtMaven.resolver server: server, repo: 'gradle-dev-local'
-							rtMaven.deployer server: server, snapshotRepo: 'libs-snapshot'
+							//rtMaven.deployer server: server, snapshotRepo: 'libs-snapshot'
 							//rtMaven.deployer.artifactDeploymentPatterns.addExclude("pom.xml")
 							buildInfo = Artifactory.newBuildInfo()
 							buildInfo.env.capture = true
 							def uploadSpec = """{
 						    				"files": [{
-										"pattern": "${packageName}-${gitCommit}-b${buildNum}.tar",
+										"pattern": "$packageName*.tar",
 						       				"target": "/home/rameshrangaswamy1/.jenkins/workspace/PR_PHASE_1/$currentModules/"
 						    					  }]
 						 			 }"""
