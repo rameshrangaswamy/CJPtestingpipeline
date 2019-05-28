@@ -82,12 +82,10 @@ def buildInfo
 			timeout(time: 1, unit: 'HOURS')
 			{
 				// Wait for SonarQube analysis to be completed and return quality gate status
-				def quality = waitForQualityGate()
-				if(quality.status != 'OK')
-				{
-					println("Quality Gate checks failed")
-					//throw new Exception("Quality Gate checks failed")
-				}
+				      def qualitygate = waitForQualityGate()
+				      if (qualitygate.status != "OK") {
+					 error "Pipeline aborted due to quality gate coverage failure: ${qualitygate.status}"
+				      }
 					printlin("Quality Gate Checks passed ")
 				}
 					
