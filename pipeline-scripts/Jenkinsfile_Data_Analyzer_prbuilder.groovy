@@ -129,8 +129,9 @@ def buildInfo
 							sh "pwd"
 							def uploadSpec = """{
 						    				"files": [{
-										"pattern": "/home/rameshrangaswamy1/.jenkins/workspace/PR_PHASE_1/$currentModules/target/$packageName*.tar",
-						       				"target": "libs-snapshot-local"
+										"pattern": "/home/rameshrangaswamy1/.jenkins/workspace/PR_PHASE_1/walmart/target/walmart*.tar",
+						       				"target": "libs-snapshot-local",
+										"recursive": "false"
 						    					  }]
 						 			 }"""
 							server.upload spec: uploadSpec, buildInfo: buildInfo
