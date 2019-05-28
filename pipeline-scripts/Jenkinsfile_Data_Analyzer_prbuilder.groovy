@@ -126,10 +126,9 @@ def buildInfo
 							//rtMaven.deployer.artifactDeploymentPatterns.addExclude("pom.xml")
 							buildInfo = Artifactory.newBuildInfo()
 							buildInfo.env.capture = true
-							sh "pwd"
 							def uploadSpec = """{
 						    				"files": [{
-										"pattern": "/home/rameshrangaswamy1/.jenkins/workspace/PR_PHASE_1/walmart/target/walmart*.tar",
+										"pattern": "/home/rameshrangaswamy1/.jenkins/workspace/PR_PHASE_1/${packageName}/target/${packageName}*.tar",
 						       				"target": "libs-snapshot-local",
 										"recursive": "false"
 						    					  }]
