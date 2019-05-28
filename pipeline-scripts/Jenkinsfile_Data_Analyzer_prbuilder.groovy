@@ -124,7 +124,7 @@ def buildInfo
 						}
 						script{
 							//rtMaven.resolver server: server, repo: 'gradle-dev-local'
-							println("packageName : $packageName")
+							//println("packageName : $packageName")
 							rtMaven.deployer server: server, snapshotRepo: 'libs-snapshot-local', releaseRepo: 'libs-release-local'
 							//rtMaven.deployer.artifactDeploymentPatterns.addExclude("pom.xml")
 							buildInfo = Artifactory.newBuildInfo()
