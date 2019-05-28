@@ -93,7 +93,7 @@ def buildInfo
 			}
 		}
 	}
-			stage('Publish to Artifactory') 
+			stage('Artifactory Configuration') 
 			{
 					println("Entering stage Publish to Artifactory")
 					currentDir = pwd()
@@ -119,15 +119,23 @@ def buildInfo
 							#!/bin/bash
 							tar cvf "${packageName}-${gitCommit}-b${buildNum}.tar" *
 							"""
+						}
 						script{
 							//rtMaven.resolver server: server, repo: 'gradle-dev-local'
 							rtMaven.deployer server: server, repo: 'libs-snapshot-local'
 							rtMaven.useWrapper = true
-							rtMaven.run pom: '/home/rameshrangaswamy1/.jenkins/workspace/PR_PHASE_1/$currentModules/pom.xml', goals: clean install, buildInfo: buildInfo
-							server.publishBuildInfo buildInfo
+							//rtMaven.run pom: '/home/rameshrangaswamy1/.jenkins/workspace/PR_PHASE_1/$currentModules/pom.xml', goals: clean install, buildInfo: buildInfo
 							}
 							//CjpArtifactoryUtils.publishCcOneAppPackageMaster(CjpConstants.ARTIFACTORY_REPO, packageName, buildNum)
-						}
+						
 					}
 			}
+			stage('publish build info')
+			{
+				steps{
+					script{
+						server.publishBuildInfo buildInfo
+					}
+		}
+	}
 }
