@@ -129,7 +129,7 @@ def buildInfo
 							def uploadSpec = """{
 						    				"files": [{
 										"pattern": "${packageName}-${gitCommit}-b${buildNum}.tar",
-						       				"target": "/home/rameshrangaswamy1/.jenkins/workspace/PR_PHASE_1/$currentMosules/"
+						       				"target": "/home/rameshrangaswamy1/.jenkins/workspace/PR_PHASE_1/$currentModules/"
 						    					  }]
 						 			 }"""
 							server.upload spec: uploadSpec, buildInfo: buildInfo
