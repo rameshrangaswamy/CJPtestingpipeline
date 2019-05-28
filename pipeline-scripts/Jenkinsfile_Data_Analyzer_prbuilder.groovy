@@ -14,7 +14,7 @@ String buildNum = currentBuild.number.toString()
 def server = Artifactory.server 'ArtifactDemo'
 def rtMaven = Artifactory.newMavenBuild()
 def buildInfo
-def packageName
+//def packageName
 	
 		stage('Git clone and setup')
 		{
@@ -113,7 +113,8 @@ def packageName
 					for(module in currentModules) 
 					{
 						def packageName = MiscUtils.getValueFromMap(packageMap,module)
-						def moduleTarPath = MiscUtils.getTarPath(tarPathMap,module)											
+						def moduleTarPath = MiscUtils.getTarPath(tarPathMap,module)	
+						println("packageName : $packageName")
 						dir(moduleTarPath)
 						{
 							sh"""
@@ -123,6 +124,7 @@ def packageName
 						}
 						script{
 							//rtMaven.resolver server: server, repo: 'gradle-dev-local'
+							println("packageName : $packageName")
 							rtMaven.deployer server: server, snapshotRepo: 'libs-snapshot-local', releaseRepo: 'libs-release-local'
 							//rtMaven.deployer.artifactDeploymentPatterns.addExclude("pom.xml")
 							buildInfo = Artifactory.newBuildInfo()
