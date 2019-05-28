@@ -14,6 +14,7 @@ String buildNum = currentBuild.number.toString()
 def server = Artifactory.server 'ArtifactDemo'
 def rtMaven = Artifactory.newMavenBuild()
 def buildInfo
+def packageName
 	
 		stage('Git clone and setup')
 		{
