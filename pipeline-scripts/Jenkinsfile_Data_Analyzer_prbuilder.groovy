@@ -86,10 +86,11 @@ def buildInfo
 				if(quality.status != 'OK')
 				{
 					println("Quality Gate checks failed")
-					throw new Exception("Quality Gate checks failed")
+					//throw new Exception("Quality Gate checks failed")
 				}
-				printlin("Quality Gate Checks passed ")
+					printlin("Quality Gate Checks passed ")
 				}
+					
 				}
 			}
 		}
