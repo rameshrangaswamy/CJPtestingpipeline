@@ -125,20 +125,28 @@ def buildInfo
 						script{
 							//rtMaven.resolver server: server, repo: 'gradle-dev-local'
 							rtMaven.deployer server: server, snapshotRepo: 'libs-snapshot'
-							rtMaven.deployer.artifactDeploymentPatterns.addExclude("pom.xml")
+							//rtMaven.deployer.artifactDeploymentPatterns.addExclude("pom.xml")
 							buildInfo = Artifactory.newBuildInfo()
 							buildInfo.env.capture = true
+							def uploadSpec = """{
+						    				"files": [{
+										"pattern": "${packageName}-${gitCommit}-b${buildNum}.tar",
+						       				"target": "/home/rameshrangaswamy1/.jenkins/workspace/PR_PHASE_1/$currentMosules/"
+						    					  }]
+						 			 }"""
+							server.upload spec: uploadSpec, buildInfo: buildInfo
+							server.publishBuildInfo buildInfo
 							//rtMaven.run pom: '/home/rameshrangaswamy1/.jenkins/workspace/PR_PHASE_1/$currentModules/pom.xml', goals: clean install, buildInfo: buildInfo
 							}
 							//CjpArtifactoryUtils.publishCcOneAppPackageMaster(CjpConstants.ARTIFACTORY_REPO, packageName, buildNum)
 						
 					}
 			}
-			stage('publish build info')
-			{
+			//stage('publish build info')
+			//{
 			
-				script{
-					server.publishBuildInfo buildInfo
-				      }
-	}
+				//script{
+
+				     // }
+	//}
 }
