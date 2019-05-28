@@ -12,7 +12,7 @@ def currentModules
 def gitCommit
 String buildNum = currentBuild.number.toString()
 def server = Artifactory.server 'ArtifactDemo'
-def rtMaven = Artifacory.newMavenBuild()
+def rtMaven = Artifactory.newMavenBuild()
 def buildInfo
 	
 		stage('Git clone and setup')
