@@ -123,7 +123,7 @@ def buildInfo
 							//rtMaven.resolver server: server, repo: 'gradle-dev-local'
 							rtMaven.deployer server: server, repo: 'libs-snapshot-local'
 							rtMaven.useWrapper = true
-							rtMaven.run pom: '/home/rameshrangaswamy1/.jenkins/workspace/PR_PHASE_1/$currentModules/pom.xml', goals: clean install, buildInfo: buildInfor
+							rtMaven.run pom: '/home/rameshrangaswamy1/.jenkins/workspace/PR_PHASE_1/$currentModules/pom.xml', goals: clean install, buildInfo: buildInfo
 							server.publishBuildInfo buildInfo
 							}
 							//CjpArtifactoryUtils.publishCcOneAppPackageMaster(CjpConstants.ARTIFACTORY_REPO, packageName, buildNum)
