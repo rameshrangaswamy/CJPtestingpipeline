@@ -123,7 +123,9 @@ def buildInfo
 						script{
 							//rtMaven.resolver server: server, repo: 'gradle-dev-local'
 							rtMaven.deployer server: server, snapshotRepo: 'libs-snapshot'
-							rtMaven.useWrapper = true
+							rtMaven.deployer.artifactDeploymentPatterns.addExclude("pom.xml")
+							buildInfo = Artifactory.newBuildInfo()
+							buildInfo.env.capture = true
 							//rtMaven.run pom: '/home/rameshrangaswamy1/.jenkins/workspace/PR_PHASE_1/$currentModules/pom.xml', goals: clean install, buildInfo: buildInfo
 							}
 							//CjpArtifactoryUtils.publishCcOneAppPackageMaster(CjpConstants.ARTIFACTORY_REPO, packageName, buildNum)
