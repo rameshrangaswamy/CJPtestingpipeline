@@ -74,80 +74,76 @@ def buildInfo
 				//def command = MiscUtils.getBuildCommand(buildCommandMap,module)
 				dir(packageBuildPath)
 				{
-				withSonarQubeEnv('SonarDemo') {
-				sh "'${mavenHome}/bin/mvn' sonar:sonar"
-  					//-Dsonar.host.url=http://35.200.203.119:9000 \
-  					//-Dsonar.login=bc7ed6c23eabd5e5001bcc733194bf9925c85efc"
+					withSonarQubeEnv('SonarDemo')
+					{
+						sh "'${mavenHome}/bin/mvn' sonar:sonar"
+						//-Dsonar.host.url=http://35.200.203.119:9000 \
+						//-Dsonar.login=bc7ed6c23eabd5e5001bcc733194bf9925c85efc"
+					}
 			
-			//timeout(time: 1, unit: 'HOURS')
-			//{
-				// Wait for SonarQube analysis to be completed and return quality gate status
-				      def qualitygate = waitForQualityGate()
-				      if (qualitygate.status != "OK") {
-					 error "Pipeline aborted due to quality gate coverage failure: ${qualitygate.status}"
-				      }
-					printlin("Quality Gate Checks passed ")
-				//}
+					timeout(time: 1, unit: 'HOURS')
+					{
+						// Wait for SonarQube analysis to be completed and return quality gate status
+						def qualitygate = waitForQualityGate()
+						if (qualitygate.status != "OK") {
+						error "Pipeline aborted due to quality gate coverage failure: ${qualitygate.status}"
+						}
+						printlin("Quality Gate Checks passed")
+					}
 					
+			
 				}
 			}
 		}
-	}
-			stage('Artifactory Configuration') 
+		stage('Artifactory Configuration') 
+		{
+				println("Entering stage Publish to Artifactory")
+				currentDir = pwd()
+				CjpArtifactoryUtils = load("${currentDir}/pipeline-scripts/utils/CjpArtifactoryUtils.groovy")
+				CjpConstants = load("${currentDir}/pipeline-scripts/utils/CjpConstants.groovy")
+				MiscUtils = load("${currentDir}/pipeline-scripts/utils/MiscUtils.groovy")
+				moduleProp = readProperties file: 'pipeline-scripts/properties/modules.properties'				
+				commitHash =  sh( script: "git rev-parse origin/${env.GIT_BRANCH}",returnStdout: true, )
+				gitCommit = commitHash.substring(0,7)
+				stageName = "Publish to artifactory"
+				def packageNames = moduleProp['PACKAGE_NAME']
+				packageMap = MiscUtils.stringToMap(packageNames)
+				tarPath = moduleProp['TAR_PATH']
+				def tarPathMap = MiscUtils.stringToMap(tarPath)
+				//rtMaven.deployer
+			for(module in currentModules) 
 			{
-					println("Entering stage Publish to Artifactory")
-					currentDir = pwd()
-					CjpArtifactoryUtils = load("${currentDir}/pipeline-scripts/utils/CjpArtifactoryUtils.groovy")
-					CjpConstants = load("${currentDir}/pipeline-scripts/utils/CjpConstants.groovy")
-					MiscUtils = load("${currentDir}/pipeline-scripts/utils/MiscUtils.groovy")
-					moduleProp = readProperties file: 'pipeline-scripts/properties/modules.properties'				
-					commitHash =  sh( script: "git rev-parse origin/${env.GIT_BRANCH}",returnStdout: true, )
-					gitCommit = commitHash.substring(0,7)
-					stageName = "Publish to artifactory"
-					def packageNames = moduleProp['PACKAGE_NAME']
-					packageMap = MiscUtils.stringToMap(packageNames)
-					tarPath = moduleProp['TAR_PATH']
-					def tarPathMap = MiscUtils.stringToMap(tarPath)
-					//rtMaven.deployer
-					for(module in currentModules) 
+					def packageName = MiscUtils.getValueFromMap(packageMap,module)
+					def moduleTarPath = MiscUtils.getTarPath(tarPathMap,module)	
+					println("packageName : $packageName")
+					dir(moduleTarPath)
 					{
-						def packageName = MiscUtils.getValueFromMap(packageMap,module)
-						def moduleTarPath = MiscUtils.getTarPath(tarPathMap,module)	
-						println("packageName : $packageName")
-						dir(moduleTarPath)
-						{
-							sh"""
-							#!/bin/bash
-							tar cvf "${packageName}-${gitCommit}-b${buildNum}.tar" *
-							"""
-						}
-						script{
-							//rtMaven.resolver server: server, repo: 'gradle-dev-local'
-							//println("packageName : $packageName")
-							rtMaven.deployer server: server, snapshotRepo: 'libs-snapshot-local', releaseRepo: 'libs-release-local'
-							//rtMaven.deployer.artifactDeploymentPatterns.addExclude("pom.xml")
-							buildInfo = Artifactory.newBuildInfo()
-							buildInfo.env.capture = true
-							def uploadSpec = """{
-						    				"files": [{
-										"pattern": "/home/rameshrangaswamy1/.jenkins/workspace/PR_PHASE_1/${packageName}/target/${packageName}*.tar",
-						       				"target": "libs-snapshot-local",
-										"recursive": "false"
-						    					  }]
-						 			 }"""
-							server.upload spec: uploadSpec, buildInfo: buildInfo
-							server.publishBuildInfo buildInfo
-							//rtMaven.run pom: '/home/rameshrangaswamy1/.jenkins/workspace/PR_PHASE_1/$currentModules/pom.xml', goals: clean install, buildInfo: buildInfo
-							}
-							//CjpArtifactoryUtils.publishCcOneAppPackageMaster(CjpConstants.ARTIFACTORY_REPO, packageName, buildNum)
-						
+						sh"""
+						#!/bin/bash
+						tar cvf "${packageName}-${gitCommit}-b${buildNum}.tar" *
+						"""
 					}
+					script
+					{
+						//rtMaven.resolver server: server, repo: 'gradle-dev-local'
+						//println("packageName : $packageName")
+						rtMaven.deployer server: server, snapshotRepo: 'libs-snapshot-local', releaseRepo: 'libs-release-local'
+						//rtMaven.deployer.artifactDeploymentPatterns.addExclude("pom.xml")
+						buildInfo = Artifactory.newBuildInfo()
+						buildInfo.env.capture = true
+						def uploadSpec = """{
+										"files": [{
+									"pattern": "/home/rameshrangaswamy1/.jenkins/workspace/PR_PHASE_1/${packageName}/target/${packageName}*.tar",
+										"target": "libs-snapshot-local",
+									"recursive": "false"
+											  }]
+								 }"""
+						server.upload spec: uploadSpec, buildInfo: buildInfo
+						server.publishBuildInfo buildInfo
+						//rtMaven.run pom: '/home/rameshrangaswamy1/.jenkins/workspace/PR_PHASE_1/$currentModules/pom.xml', goals: clean install, buildInfo: buildInfo
+					}
+					//CjpArtifactoryUtils.publishCcOneAppPackageMaster(CjpConstants.ARTIFACTORY_REPO, packageName, buildNum)
+						
 			}
-			//stage('publish build info')
-			//{
-			
-				//script{
-
-				     // }
-	//}
+		}
 }
