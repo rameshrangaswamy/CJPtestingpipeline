@@ -121,8 +121,8 @@ def buildInfo
 							"""
 						}
 						script{
-							//rtMaven.resolver server: server, repo: 'gradle-dev-local'
-							//rtMaven.deployer server: server, snapshotRepo: 'libs-snapshot'
+							rtMaven.deployer releaseRepo: 'libs-release-local', snapshotRepo: 'libs-snapshot-local', server: server
+							rtMaven.resolver releaseRepo: 'libs-release', snapshotRepo: 'libs-snapshot', server: server
 							//rtMaven.deployer.artifactDeploymentPatterns.addExclude("pom.xml")
 							buildInfo = Artifactory.newBuildInfo()
 							buildInfo.env.capture = true
