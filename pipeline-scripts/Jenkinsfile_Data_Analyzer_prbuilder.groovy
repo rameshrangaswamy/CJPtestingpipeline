@@ -127,7 +127,7 @@ def buildInfo
 					script
 					{
 						//rtMaven.resolver server: server, repo: 'gradle-dev-local'
-						//println("packageName : $packageName")
+						println("packageName : $packageName")
 						rtMaven.deployer server: server, snapshotRepo: 'libs-snapshot-local', releaseRepo: 'libs-release-local'
 						//rtMaven.deployer.artifactDeploymentPatterns.addExclude("pom.xml")
 						buildInfo = Artifactory.newBuildInfo()
@@ -135,7 +135,7 @@ def buildInfo
 						def uploadSpec = """{
 										"files": [{
 									"pattern": "/home/rameshrangaswamy1/.jenkins/workspace/PR_PHASE_1/${packageName}/target/${packageName}*.tar",
-										"target": "libs-snapshot-local",
+										"target": "libs-release-local",
 									"recursive": "false"
 											  }]
 								 }"""
