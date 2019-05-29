@@ -69,6 +69,7 @@ def buildInfo
 				def packagePath = moduleProp['CJP_PACKAGEPATH']
 				//println("packagePath : $packagePath")
 				packagePathMap = MiscUtils.stringToMap(packagePath)
+				def sonarBranchName = MiscUtils.getSonarBranchName(ghprbSourceBranch)
 				//println("packagePathMap : $packagePathMap")
 				def packageBuildPath = MiscUtils.getBuildPath(packagePathMap,module)
 				//def command = MiscUtils.getBuildCommand(buildCommandMap,module)
@@ -76,7 +77,8 @@ def buildInfo
 				{
 					withSonarQubeEnv('SonarDemo')
 					{
-						sh "'${mavenHome}/bin/mvn' sonar:sonar"
+						//sh "'${mavenHome}/bin/mvn' sonar:sonar"
+						sh "${mavenHome}/bin/mvn -Dsonar.branch.name=${sonarBranchName} sonar:sonar"
 						//-Dsonar.host.url=http://35.200.203.119:9000 \
 						//-Dsonar.login=bc7ed6c23eabd5e5001bcc733194bf9925c85efc"
 					}
