@@ -81,17 +81,18 @@ def buildInfo
 						//-Dsonar.login=bc7ed6c23eabd5e5001bcc733194bf9925c85efc"
 					}
 			
-					//timeout(time: 1, unit: 'HOURS')
-					//{
+					println("Waiting for SonarQube Quality evaluation response")
+					timeout(time: 1, unit: 'HOURS')
+					{
 						// Wait for SonarQube analysis to be completed and return quality gate status
-						def qualitygate = waitForQualityGate()
-						if (qualitygate.status != "OK") {
-						error "Pipeline aborted due to quality gate coverage failure: ${qualitygate.status}"
+						def quality = waitForQualityGate()
+						if(quality.status != 'OK')
+						{
+							println("Quality gate check failed")
+							throw new Exception("Quality Gate check failed")
 						}
-						printlin("Quality Gate Checks passed")
-					//}
-					
-			
+						println("Quality Gate check passed")
+					}
 				}
 			}
 		}
