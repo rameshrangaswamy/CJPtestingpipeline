@@ -61,6 +61,7 @@ def buildInfo
 				}
 			}
 		}
+	/*
 		stage('sonarAnalysis')
 		{       
 			for(module in currentModules)
