@@ -149,5 +149,5 @@ def buildInfo
 					//CjpArtifactoryUtils.publishCcOneAppPackageMaster(CjpConstants.ARTIFACTORY_REPO, packageName, buildNum)
 						
 			}
-		}
+		}*/
 }
