@@ -133,9 +133,9 @@ node(NODE_LABEL)
 		{
 			checkout scm
 						
-			def Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
+			Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
 			
-			def GitUtils = load("${currentDir}/pipeline/utils/GitUtils.groovy")
+			GitUtils = load("${currentDir}/pipeline/utils/GitUtils.groovy")
 			
 			Logger.info("Entering PR Builder")
 
