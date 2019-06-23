@@ -56,7 +56,7 @@ def updatePrStatus(context, status, commitId=ghprbActualCommit) {
         def auth_key = "${USER}:${PASS}"
 		def auth_encoded = auth_key.bytes.encodeBase64().toString()
         def response = httpRequest consoleLogResponseBody: true,
-                customHeaders: [[name: 'Authorization', "Basic ${auth_encoded}"]],
+                customHeaders: [[name: 'Authorization', value: "Basic ${auth_encoded}"]],
                 httpMode: 'POST', requestBody: payload,
 url: "${CjpConstants.GITHUB_STATUS_URL}/${ghprbGhRepository}/statuses/${commitId}"
 
