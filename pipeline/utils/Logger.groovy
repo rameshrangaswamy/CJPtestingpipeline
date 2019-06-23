@@ -19,3 +19,5 @@ def debug(String message) {
     if (env.DEBUG)
         echo "DEBUG: ${message}"
 }
+
+return this
