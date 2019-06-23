@@ -13,10 +13,6 @@
 
 //@Library("ccc-pipeline-utils") _
 
-import hudson.model.*
-import java.util.logging.Logger
-
-
 
 def checkoutCommitHash() {
     checkout scm
@@ -119,7 +115,7 @@ node(NODE_LABEL)
 
 	def packagePathMap
 	
-	Logger logger = Logger.getLogger("")
+	def Logger
 	
 	def GitUtils
 
@@ -137,7 +133,7 @@ node(NODE_LABEL)
 
 			println("HI")
 			checkout scm
-			//Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
+			Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
 			println("Reading modules.properties : $Logger")
 			GitUtils = load("${currentDir}/pipeline/utils/GitUtils.groovy")
 			
