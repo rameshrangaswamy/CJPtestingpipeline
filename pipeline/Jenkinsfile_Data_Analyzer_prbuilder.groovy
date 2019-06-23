@@ -79,7 +79,7 @@ url: "${Constants.GITHUB_STATUS_URL}/${ghprbGhRepository}/statuses/${commitId}"
 
 //logger methods
 
-import Logger
+//import Logger
 
 /**
  * Centralized logging
