@@ -1,5 +1,8 @@
 #!groovy
 
+import groovy.json.JsonSlurper
+
+@NonCPS
 def checkoutCommitHash() {
     checkout scm
     if(!env.BUILD_COMMIT_HASH) {
@@ -8,11 +11,13 @@ def checkoutCommitHash() {
     sh "git checkout $BUILD_COMMIT_HASH"
 }
 
+@NonCPS
 def getCommitHash() {
     def gitCommit = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
     return gitCommit
 }
 
+@NonCPS
 def mergePrToMaster(prNum, prBranch) {
     sshagent([GIT_AUTH]) {
         sh """ git config --global user.email "rameshrangaswamy1@gmail.com" """
@@ -25,6 +30,7 @@ def mergePrToMaster(prNum, prBranch) {
 }
 
 // To checkout desired repo and branch
+@NonCPS
 def gitCheckout(String repo, String buildBranch, String targetDir = repo)
 {
 checkout([$class: 'GitSCM',
@@ -39,6 +45,7 @@ url: 'git@github.com:' + repo + '.git']]
 }
 
 /** Method to update PR Status in GIT */
+@NonCPS
 def updatePrStatus(context, status, commitId=ghprbActualCommit) {
     def payload = """ {
         "state": "$status",
