@@ -52,7 +52,7 @@ def updatePrStatus(context, status, commitId=ghprbActualCommit) {
         "target_url": "${currentBuild.absoluteUrl}",
         "context": "$context"
     }"""
-    withCredentials([string(credentialsId: 'rameshrangaswamyadmin', variable: 'SECRET')]) {
+    withCredentials([string(credentialsId: 'ram', variable: 'SECRET')]) {
         def response = httpRequest consoleLogResponseBody: true,
                 customHeaders: [[name: 'Authorization', value: "token ${SECRET}"]],
                 httpMode: 'POST', requestBody: payload,
