@@ -1,6 +1,7 @@
 #!groovy
 
 import groovy.json.JsonSlurper
+
 def checkoutCommitHash() {
     checkout scm
     if(!env.BUILD_COMMIT_HASH) {
@@ -47,7 +48,7 @@ def updatePrStatus(context, status, commitId=ghprbActualCommit) {
         "target_url": "${currentBuild.absoluteUrl}",
         "context": "$context"
     }"""
-    withCredentials([string(credentialsId: 'ramesh-testpipelineadmin', variable: 'GITHUB_TOKEN')]) {
+    withCredentials([string(credentialsId: 'rameshrangaswamy', variable: 'GITHUB_TOKEN')]) {
         def response = httpRequest consoleLogResponseBody: true,
                 customHeaders: [[name: 'Authorization', value: "token ${GITHUB_TOKEN}"]],
                 httpMode: 'POST', requestBody: payload,
