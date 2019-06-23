@@ -16,7 +16,7 @@
 
 
 
-@Library("CJPtestingpipeline") pipelineLibrary
+@Library("CJPtestingpipeline") _
 
 
 
@@ -79,7 +79,7 @@ url: "${Constants.GITHUB_STATUS_URL}/${ghprbGhRepository}/statuses/${commitId}"
 
 //logger methods
 
-import io.CJPtestingpipeline.pipeline.utils.Logger
+import Logger
 
 /**
  * Centralized logging
