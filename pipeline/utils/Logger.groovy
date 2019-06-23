@@ -1,3 +1,6 @@
+#!groovy
+
+import groovy.json.JsonSlurper
 
 /**
  * Centralized logging
