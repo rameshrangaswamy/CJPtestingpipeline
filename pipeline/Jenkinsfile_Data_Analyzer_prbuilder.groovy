@@ -139,7 +139,7 @@ node(NODE_LABEL)
 	
 			GitUtils = load("${currentDir}/pipeline/utils/GitUtils.groovy")
 			
-			Logger.info("Entering PR Builder")
+			Logger.debug("Entering PR Builder")
 
 			Logger.info("Build trigger by $ghprbTriggerAuthor using comment $ghprbCommentBody")
 
