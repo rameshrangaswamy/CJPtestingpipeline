@@ -112,6 +112,10 @@ node(NODE_LABEL)
 
 			MiscUtils.setDisplayName(buildNum, currentModules)
 			
+		    	withCredentials([string(credentialsId: 'ram', variable: 'SECRET')]) { //set SECRET with the credential content
+			echo "My secret text is '${SECRET}'"
+			 }
+			
 			Logger.info("hi")
 
 			GitUtils.updatePrStatus(stageName,"success",commitHash)			
