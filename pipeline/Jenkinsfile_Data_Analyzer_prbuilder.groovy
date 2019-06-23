@@ -16,7 +16,7 @@
 
 
 
-@Library('CJPtestingpipeline') pipelineLibrary
+@Library("CJPtestingpipeline") pipelineLibrary
 
 
 
