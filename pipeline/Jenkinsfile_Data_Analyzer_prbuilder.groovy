@@ -133,10 +133,9 @@ node(NODE_LABEL)
 		{
 			checkout scm
 			
+			println("HI")
 						
 			def Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
-			
-			Logger Logger=new Logger()
 	
 			GitUtils = load("${currentDir}/pipeline/utils/GitUtils.groovy")
 			
