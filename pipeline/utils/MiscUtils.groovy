@@ -1,7 +1,5 @@
 #!groovy
 
-//analyzer/pipeline-scripts/utils/MiscUtils.groovy
-package com.cisco.ccone.JenkinsUtils
 
 import groovy.json.JsonSlurper
 
