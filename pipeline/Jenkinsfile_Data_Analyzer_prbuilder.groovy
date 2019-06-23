@@ -118,6 +118,8 @@ node(NODE_LABEL)
 	def Logger
 	
 	def GitUtils
+	
+	def currentDir
 
 		
 
@@ -130,13 +132,13 @@ node(NODE_LABEL)
 		try 
 
 		{
+			Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
 			println("HI")
 			checkout scm
-			Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
 			println("Reading modules.properties : $Logger")
 			GitUtils = load("${currentDir}/pipeline/utils/GitUtils.groovy")
 			
-			Logger.debug("Entering PR Builder")
+			logger = Logger.info("Entering PR Builder")
 
 			Logger.info("Build trigger by $ghprbTriggerAuthor using comment $ghprbCommentBody")
 
