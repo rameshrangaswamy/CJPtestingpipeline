@@ -99,7 +99,7 @@ def Logger(){
 def info(String message) {
     echo "INFO: ${Build trigger by $ghprbTriggerAuthor using comment $ghprbCommentBody}"
 }
-	return
+	return info
 }
 
 /** Specifying node on which current build would run */	
