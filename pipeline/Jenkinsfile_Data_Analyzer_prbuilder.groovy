@@ -133,7 +133,7 @@ node(NODE_LABEL)
 		{
 			checkout scm
 						
-			Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
+			Logger.load("${currentDir}/pipeline/utils/Logger.groovy")
 			
 			println("SOP");
 			
