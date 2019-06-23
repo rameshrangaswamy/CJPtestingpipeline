@@ -136,8 +136,8 @@ node(NODE_LABEL)
 						
 			def Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
 			
-			println("SOP");
-			
+			Logger Logger=new Logger()
+	
 			GitUtils = load("${currentDir}/pipeline/utils/GitUtils.groovy")
 			
 			Logger=Logger.info("Entering PR Builder")
