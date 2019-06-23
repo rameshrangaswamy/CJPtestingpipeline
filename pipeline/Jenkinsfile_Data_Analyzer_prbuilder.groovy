@@ -10,33 +10,6 @@
 */
 
 
-
-//@Library("ccc-pipeline-utils") _
-
-//logger methods
-
-//import Logger
-
-/**
- * Centralized logging
- */
-
-
-//import Constants
-
-class Constants {
-
-    static final String GREEN_APP_PREFIX = 'green-'
-    static final String MERGE_COMMAND = 'MERGE'
-    static final String TRIALTEST_COMMAND = 'TEST'
-    static final String TRIALUPGRADE_COMMAND = 'TRIALUPGRADE'
-    static final String SCHEMA_UPGRADE_COMMAND = 'UPGRADE'
-    static final String MAC_MERGE_COMMAND = 'MAC_MERGE'
-	
-	static final String GITHUB_STATUS_URL = 'https://github.com/api/v3/repos'
-	}
-
-
 /** Specifying node on which current build would run */	
 
 node(NODE_LABEL) 
@@ -60,6 +33,8 @@ node(NODE_LABEL)
 	def Logger
 	
 	def GitUtils
+	
+	def CjpConstants 
 	
 
 		
