@@ -74,11 +74,16 @@ node(NODE_LABEL)
 
 		{
 			checkout scm
+			
 			def currentDir
+			
 			currentDir = pwd()
+			
 			Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
 			
 			GitUtils = load("${currentDir}/pipeline/utils/GitUtils.groovy")
+			
+			CjpConstants = load("${currentDir}/pipeline/utils/CjpConstants.groovy")
 			
 			logger = Logger.info("Entering PR Builder")
 
