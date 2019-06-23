@@ -74,10 +74,6 @@ node(NODE_LABEL)
 
 			Logger.info("Reading modules.properties : $moduleProp")
 
-			withCredentials([string(credentialsId: 'rameshrangaswamyadmin', variable: 'SECRET')]) {
-			    echo "My secret text is '${SECRET}'"
-			}
-
 			
 
 			// Get the commit hash of PR branch 
@@ -125,9 +121,6 @@ node(NODE_LABEL)
 		catch(Exception exception)
 
 		{
-			def currentDir
-			currentDir = pwd()
-			GitUtils = load("${currentDir}/pipeline/utils/GitUtils.groovy")
 
 			currentBuild.result = "FAILURE"
 
