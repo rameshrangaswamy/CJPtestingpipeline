@@ -116,7 +116,7 @@ node(NODE_LABEL)
 
 	def packagePathMap
 	
-	Logger logger = Logger.getLogger("") 
+	def Logger
 	
 	def GitUtils
 
