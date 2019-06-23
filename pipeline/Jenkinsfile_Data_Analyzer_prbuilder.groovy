@@ -16,7 +16,7 @@
 
 
 
-//@Library("ccc-pipeline-utils") _
+@Library('CJPtestingpipeline') pipelineLibrary
 
 
 
@@ -79,7 +79,7 @@ url: "${Constants.GITHUB_STATUS_URL}/${ghprbGhRepository}/statuses/${commitId}"
 
 //logger methods
 
-//import Logger
+import io.CJPtestingpipeline.pipeline.utils.Logger
 
 /**
  * Centralized logging
@@ -107,23 +107,9 @@ class Constants {
 node(NODE_LABEL) 
 {
 
-def Logger(){
+	//def GitUtils
 	
-def info(String message) {
-    echo "INFO: ${message}"
-}
-
-def error(String message) {
-    echo "WARNING: ${message}"
-}
-
-def debug(String message) {
-    if (env.DEBUG)
-        echo "DEBUG: ${message}"
-}
-
-}
-	def GitUtils
+	def Logger = new Logger()
 
 	Logger.info("Entering PR Builder")
 
