@@ -94,13 +94,7 @@ class Constants {
 	
 	static final String GITHUB_STATUS_URL = 'https://github.com/api/v3/repos'
 	}
-def Logger(){
-	
-def info(String message) {
-    echo "INFO: ${Build trigger by $ghprbTriggerAuthor using comment $ghprbCommentBody}"
-}
-	return info
-}
+
 
 /** Specifying node on which current build would run */	
 
@@ -140,7 +134,7 @@ node(NODE_LABEL)
 
 			println("HI")
 			checkout scm
-			//Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
+			Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
 			println("Reading modules.properties : $Logger")
 			GitUtils = load("${currentDir}/pipeline/utils/GitUtils.groovy")
 			
