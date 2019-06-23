@@ -3,20 +3,15 @@
 //analyzer/pipeline-scripts/Jenkinsfile_Data_Analyzer_prbuilder.groovy
 
 /**
-
  * This script is triggered for PR Builder
-
  * It is invoked by specific comment issued by user on PRs
-
  * Comments for this script is "DATA_VALIDATE"
-
  * Identifies the changes in the PR and performs validations for the same
-
 */
 
 
 
-//@Library("CJPtestingpipeline") _
+//@Library("ccc-pipeline-utils") _
 
 
 
@@ -85,7 +80,22 @@ url: "${Constants.GITHUB_STATUS_URL}/${ghprbGhRepository}/statuses/${commitId}"
  * Centralized logging
  */
 
+def Logger(message){
+	
+def info(String message) {
+    echo "INFO: ${message}"
+}
 
+def error(String message) {
+    echo "WARNING: ${message}"
+}
+
+def debug(String message) {
+    if (env.DEBUG)
+        echo "DEBUG: ${message}"
+}
+
+}
 
 //import Constants
 
@@ -107,10 +117,8 @@ class Constants {
 node(NODE_LABEL) 
 {
 
-	def Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
-	
-	//def GitUtils
-	
+	def GitUtils
+
 	Logger.info("Entering PR Builder")
 
 	
@@ -232,11 +240,8 @@ node(NODE_LABEL)
 	
 
 	/**
-
 	* Setting up Maven Environment for build and UT stage
-
 	* Stage to run UT's for changed modules
-
 	*/
 
 	
