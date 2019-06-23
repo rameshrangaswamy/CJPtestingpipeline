@@ -105,8 +105,7 @@ class Constants {
     static final String TRIALUPGRADE_COMMAND = 'TRIALUPGRADE'
     static final String SCHEMA_UPGRADE_COMMAND = 'UPGRADE'
     static final String MAC_MERGE_COMMAND = 'MAC_MERGE'
-	
-	static final String GITHUB_STATUS_URL = 'https://github.com/api/v3/repos'
+    static final String GITHUB_STATUS_URL = 'https://github.com/api/v3/repos'
 
 
 
@@ -114,7 +113,6 @@ class Constants {
 /** Specifying node on which current build would run */	
 
 node("NODE_LABEL")
-
 {
 
 	
