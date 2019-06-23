@@ -121,6 +121,11 @@ node(NODE_LABEL)
 		catch(Exception exception)
 
 		{
+			def currentDir
+			
+			currentDir = pwd()
+			
+			CjpConstants = load("${currentDir}/pipeline/utils/CjpConstants.groovy")
 
 			currentBuild.result = "FAILURE"
 
