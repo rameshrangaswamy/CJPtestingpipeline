@@ -131,6 +131,7 @@ node(NODE_LABEL)
 		try 
 
 		{
+			println("HI")
 			checkout scm
 			
 			println("HI")
