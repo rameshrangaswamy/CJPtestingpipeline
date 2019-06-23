@@ -122,7 +122,7 @@ node(NODE_LABEL)
 
 			def changedModules = MiscUtils.getModifiedModules(changeSet)
 
-			def serviceModules = moduleProp['DATA_MODULES']
+			def serviceModules = moduleProp['CJP_MODULES']
 
 			def serviceModulesList = serviceModules.split(',')
 
