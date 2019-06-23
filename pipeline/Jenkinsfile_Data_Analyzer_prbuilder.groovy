@@ -79,6 +79,8 @@ url: "${Constants.GITHUB_STATUS_URL}/${ghprbGhRepository}/statuses/${commitId}"
 
 //logger methods
 
+import Logger
+
 /**
  * Centralized logging
  */
@@ -119,9 +121,9 @@ node(NODE_LABEL)
 
 	
 
-	//def GitUtils = new GitUtils()
+	def GitUtils
 
-	//def Logger = new Logger()
+	def Logger
 
 	Logger.info("Entering PR Builder")
 
