@@ -60,7 +60,7 @@ node(NODE_LABEL)
 			
 			CjpConstants = load("${currentDir}/pipeline/utils/CjpConstants.groovy")
 			
-			logger = Logger.info("Entering PR Builder")
+			Logger.info("Entering PR Builder")
 
 			Logger.info("Build trigger by $ghprbTriggerAuthor using comment $ghprbCommentBody")
 
