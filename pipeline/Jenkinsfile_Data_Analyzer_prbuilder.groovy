@@ -249,37 +249,25 @@ node(NODE_LABEL)
 
 				{
 
-					Logger.info("Entering Build and UT's stage")
-
-					stageName = "Build and UTs"
-
-					def buildCommand = moduleProp['DATA_ANT_MODULES']
-
-					def buildCommandMap = MiscUtils.stringToMap(buildCommand)
-
-					def packagePath = moduleProp['DATA_PACKAGEPATH']
-
+				for(module in currentModules)
+				{
+					def moduleProp = readProperties file: 'pipeline-scripts/properties/modules.properties'
+					
+					def packagePath = moduleProp['CJP_PACKAGEPATH']
+					
+					println("packagePath : $packagePath")
+					
 					packagePathMap = MiscUtils.stringToMap(packagePath)
-
-					for(module in currentModules)
-
+					
+					println("packagePathMap : $packagePathMap")
+					
+					def packageBuildPath = MiscUtils.getBuildPath(packagePathMap,module)
+					
+					dir(packageBuildPath)
 					{
-
-						def packageBuildPath = MiscUtils.getBuildPath(packagePathMap,module)
-
-						def command = MiscUtils.getBuildCommand(buildCommandMap,module)
-
-						dir(packageBuildPath)
-
-						{
-
-							Logger.info("Running UTs for $module")
-
-							sh "$command"
-
-						}
-
+						sh "'${mavenHome}/bin/mvn' clean package"
 					}
+				}
 
 					GitUtils.updatePrStatus(stageName,"success",commitHash)
 
