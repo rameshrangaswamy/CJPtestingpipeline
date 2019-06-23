@@ -16,7 +16,7 @@
 
 
 
-@Library("CJPtestingpipeline") _
+//@Library("CJPtestingpipeline") _
 
 
 
@@ -79,7 +79,7 @@ url: "${Constants.GITHUB_STATUS_URL}/${ghprbGhRepository}/statuses/${commitId}"
 
 //logger methods
 
-import Logger
+//import Logger
 
 /**
  * Centralized logging
@@ -107,10 +107,10 @@ class Constants {
 node(NODE_LABEL) 
 {
 
+	def Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
+	
 	//def GitUtils
 	
-	def Logger = new Logger()
-
 	Logger.info("Entering PR Builder")
 
 	
