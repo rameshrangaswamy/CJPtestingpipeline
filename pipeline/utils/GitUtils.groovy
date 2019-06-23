@@ -41,9 +41,9 @@ url: 'git@github.com:' + repo + '.git']]
 /** Method to update PR Status in GIT */
 def updatePrStatus(context, status, commitId=ghprbActualCommit) {
     def payload = """ {
-        "state": "$status",
-        "target_url": "${currentBuild.absoluteUrl}",
-        "context": "$context"
+        "state": "$status"
+        //"target_url": "${currentBuild.absoluteUrl}",
+        //"context": "$context"
     }"""
     withCredentials([string(credentialsId: 'rameshrangaswamyadmin', variable: 'SECRET')]) {
         def response = httpRequest consoleLogResponseBody: true,
