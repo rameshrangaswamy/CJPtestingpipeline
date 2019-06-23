@@ -102,11 +102,7 @@ node(NODE_LABEL)
 {
 
 
-	def mavenHome = tool(name: 'maven-3.5.0', type: 'maven');
-
-	def antHome = tool(name: 'ant-1.9.6', type: 'ant');
-
-	
+	def mavenHome = tool 'maven'
 
 	final String buildNum = currentBuild.number.toString()
 
