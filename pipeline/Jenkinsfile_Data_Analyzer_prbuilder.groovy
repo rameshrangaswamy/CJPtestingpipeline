@@ -135,8 +135,7 @@ node(NODE_LABEL)
 			def currentDir
 			currentDir = pwd()
 			Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
-			println("HI")
-			println("Reading modules.properties : $Logger")
+			
 			GitUtils = load("${currentDir}/pipeline/utils/GitUtils.groovy")
 			
 			logger = Logger.info("Entering PR Builder")
