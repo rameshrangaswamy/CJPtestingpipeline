@@ -84,6 +84,9 @@ import Logger
 /**
  * Centralized logging
  */
+
+def Logger(){
+	
 def info(String message) {
     echo "INFO: ${message}"
 }
@@ -95,6 +98,8 @@ def error(String message) {
 def debug(String message) {
     if (env.DEBUG)
         echo "DEBUG: ${message}"
+}
+
 }
 
 //import Constants
@@ -117,13 +122,7 @@ class Constants {
 node(NODE_LABEL) 
 {
 
-	
-
-	
-
 	def GitUtils
-
-	def Logger
 
 	Logger.info("Entering PR Builder")
 
