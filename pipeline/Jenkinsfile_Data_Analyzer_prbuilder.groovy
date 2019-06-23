@@ -85,22 +85,7 @@ url: "${Constants.GITHUB_STATUS_URL}/${ghprbGhRepository}/statuses/${commitId}"
  * Centralized logging
  */
 
-def Logger(){
-	
-def info(String message) {
-    echo "INFO: ${message}"
-}
 
-def error(String message) {
-    echo "WARNING: ${message}"
-}
-
-def debug(String message) {
-    if (env.DEBUG)
-        echo "DEBUG: ${message}"
-}
-
-}
 
 //import Constants
 
@@ -122,6 +107,22 @@ class Constants {
 node(NODE_LABEL) 
 {
 
+def Logger(){
+	
+def info(String message) {
+    echo "INFO: ${message}"
+}
+
+def error(String message) {
+    echo "WARNING: ${message}"
+}
+
+def debug(String message) {
+    if (env.DEBUG)
+        echo "DEBUG: ${message}"
+}
+
+}
 	def GitUtils
 
 	Logger.info("Entering PR Builder")
