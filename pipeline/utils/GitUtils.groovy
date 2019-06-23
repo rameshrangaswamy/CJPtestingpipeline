@@ -1,6 +1,7 @@
 #!groovy
 
 import groovy.json.JsonSlurper
+
 def checkoutCommitHash() {
     checkout scm
     if(!env.BUILD_COMMIT_HASH) {
