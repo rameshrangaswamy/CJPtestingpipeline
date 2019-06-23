@@ -74,6 +74,8 @@ node(NODE_LABEL)
 
 			Logger.info("Reading modules.properties : $moduleProp")
 
+			withCredentials([string(credentialsId: 'rameshrangaswamyadmin', variable: 'SECRET') 
+        		sh "echo "My secret text is '${SECRET}'""
 			
 
 			// Get the commit hash of PR branch 
