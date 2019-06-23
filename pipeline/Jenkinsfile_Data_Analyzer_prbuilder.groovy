@@ -131,6 +131,8 @@ node(NODE_LABEL)
 		try 
 
 		{
+			Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
+			println("Reading modules.properties : $Logger")
 			println("HI")
 			checkout scm
 			
