@@ -113,7 +113,7 @@ class Constants {
 
 /** Specifying node on which current build would run */	
 
-node(NODE_LABEL)
+node("NODE_LABEL")
 
 {
 
