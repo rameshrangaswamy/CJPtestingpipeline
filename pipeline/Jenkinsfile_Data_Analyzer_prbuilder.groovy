@@ -115,6 +115,10 @@ node(NODE_LABEL)
 	def MiscUtils
 
 	def packagePathMap
+	
+	def Logger 
+	
+	def GitUtils
 
 		
 
@@ -127,7 +131,10 @@ node(NODE_LABEL)
 		try 
 
 		{
+			checkout scm
+						
 			def Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
+			
 			def GitUtils = load("${currentDir}/pipeline/utils/GitUtils.groovy")
 			
 			Logger.info("Entering PR Builder")
@@ -137,8 +144,6 @@ node(NODE_LABEL)
 			Logger.info("Entering Git Clone and setup stage")
 
 			stageName = "Git clone and Setup"
-
-			checkout scm
 
 			moduleProp = readProperties file: 'pipeline/properties/modules.properties'
 
