@@ -119,7 +119,6 @@ node(NODE_LABEL)
 	
 	def GitUtils
 	
-	def currentDir
 
 		
 
@@ -132,6 +131,7 @@ node(NODE_LABEL)
 		try 
 
 		{
+			def currentDir
 			Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
 			println("HI")
 			checkout scm
