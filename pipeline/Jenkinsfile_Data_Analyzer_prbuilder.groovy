@@ -74,23 +74,6 @@ url: "${Constants.GITHUB_STATUS_URL}/${ghprbGhRepository}/statuses/${commitId}"
 
 //logger methods
 
-	def Logger(){
-
-	def info(String message) {
-	    echo "INFO: ${message}"
-	}
-
-	def error(String message) {
-	    echo "WARNING: ${message}"
-	}
-
-	def debug(String message) {
-	    if (env.DEBUG)
-		echo "DEBUG: ${message}"
-	}
-	return
-	}
-
 //import Logger
 
 /**
@@ -118,14 +101,6 @@ class Constants {
 node(NODE_LABEL) 
 {
 
-	def GitUtils = new GitUtils()
-	def Logger = new Logger()
-
-	Logger.info("Entering PR Builder")
-
-	
-
-	Logger.info("Build trigger by $ghprbTriggerAuthor using comment $ghprbCommentBody")
 
 	def mavenHome = tool(name: 'maven-3.5.0', type: 'maven');
 
@@ -156,6 +131,12 @@ node(NODE_LABEL)
 		try 
 
 		{
+			def Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
+			def GitUtils = load("${currentDir}/pipeline/utils/GitUtils.groovy")
+			
+			Logger.info("Entering PR Builder")
+
+			Logger.info("Build trigger by $ghprbTriggerAuthor using comment $ghprbCommentBody")
 
 			Logger.info("Entering Git Clone and setup stage")
 
