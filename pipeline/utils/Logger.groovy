@@ -1,24 +1,56 @@
-#!groovy
+import groovy.util.logging.Slf4j
 
-import groovy.json.JsonSlurper
+@Grapes([
+    @Grab(group='ch.qos.logback', module='logback-classic', version='1.0.13') 
+])
 
-/**
- * Centralized logging
- */ 
-@NonCPS
+// 
+// Classes
+// =======
+
+@Slf4j
 class StandardGreeting {
-def info(String message) {
-    echo "INFO: ${Build trigger by $ghprbTriggerAuthor using comment $ghprbCommentBody}"
+
+    def greet() {
+        log.trace "Hello world"
+        log.debug "Hello world"
+        log.warn  "Hello world"
+        log.info  "Hello world"
+        log.error "Hello world"
+    }
 }
 
-def error(String message) {
-    echo "WARNING: ${message}"
+@Slf4j
+class SpecialGreeting {
+
+    def greet() {
+        log.trace "Hello world"
+        log.debug "Hello world"
+        log.warn  "Hello world"
+        log.info  "Hello world"
+        log.error "Hello world"
+    }
 }
 
-def debug(String message) {
-    if (env.DEBUG)
-        echo "DEBUG: ${message}"
-}
+@Slf4j
+class GreetingRunner {
+
+    def greetings  = [new StandardGreeting(), new SpecialGreeting()]
+
+    def run() {
+        log.info "Starting to talk"
+
+        greetings.each {
+            it.greet()
+        }
+
+        log.info "Finished talking"
+    }
 }
 
-return this;
+// 
+// Main program
+// ============
+def runner = new GreetingRunner()
+
+runner.run()
