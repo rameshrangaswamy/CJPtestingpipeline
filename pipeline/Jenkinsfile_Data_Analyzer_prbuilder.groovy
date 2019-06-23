@@ -132,14 +132,15 @@ node(NODE_LABEL)
 
 		{
 			checkout scm
+			
 						
-			Logger.load("${currentDir}/pipeline/utils/Logger.groovy")
+			def Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
 			
 			println("SOP");
 			
 			GitUtils = load("${currentDir}/pipeline/utils/GitUtils.groovy")
 			
-			Logger.info("Entering PR Builder")
+			Logger=Logger.info("Entering PR Builder")
 
 			Logger.info("Build trigger by $ghprbTriggerAuthor using comment $ghprbCommentBody")
 
