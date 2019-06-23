@@ -130,10 +130,10 @@ node(NODE_LABEL)
 		try 
 
 		{
-
+			def Logger
 			println("HI")
 			checkout scm
-			def Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
+			Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
 			println("Reading modules.properties : $Logger")
 			GitUtils = load("${currentDir}/pipeline/utils/GitUtils.groovy")
 			
