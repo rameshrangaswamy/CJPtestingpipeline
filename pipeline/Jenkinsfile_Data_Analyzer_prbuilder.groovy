@@ -115,7 +115,7 @@ node(NODE_LABEL)
 
 	def packagePathMap
 	
-	def Logger
+	//def Logger
 	
 	def GitUtils
 
@@ -133,7 +133,7 @@ node(NODE_LABEL)
 
 			println("HI")
 			checkout scm
-			Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
+			def Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
 			println("Reading modules.properties : $Logger")
 			GitUtils = load("${currentDir}/pipeline/utils/GitUtils.groovy")
 			
