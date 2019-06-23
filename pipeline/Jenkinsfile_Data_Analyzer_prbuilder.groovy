@@ -196,7 +196,7 @@ node(NODE_LABEL)
 
 				for(module in currentModules)
 				{
-					def moduleProp = readProperties file: 'pipeline-scripts/properties/modules.properties'
+					def moduleProp = readProperties file: 'pipeline/properties/modules.properties'
 					
 					def packagePath = moduleProp['CJP_PACKAGEPATH']
 					
