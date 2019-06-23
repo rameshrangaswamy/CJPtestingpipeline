@@ -52,9 +52,9 @@ def updatePrStatus(context, status, commitId=ghprbActualCommit) {
         "target_url": "${currentBuild.absoluteUrl}",
         "context": "$context"
     }"""
-    withCredentials([string(credentialsId: 'rameshrangaswamy', variable: 'SECRET')]) {
+    withCredentials([string(credentialsId: 'ramadmin', variable: 'ramadmin')]) {
         def response = httpRequest consoleLogResponseBody: true,
-                customHeaders: [[name: 'Authorization', value: "token ${SECRET}"]],
+                customHeaders: [[name: 'Authorization', value: "token ${ramadmin}"]],
                 httpMode: 'POST', requestBody: payload,
 url: "${CjpConstants.GITHUB_STATUS_URL}/${ghprbGhRepository}/statuses/${commitId}"
 
