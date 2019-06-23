@@ -135,9 +135,11 @@ node(NODE_LABEL)
 			checkout scm
 			
 			println("HI")
+			
+			
 						
 			Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
-	
+			println("Reading modules.properties : $Logger")
 			GitUtils = load("${currentDir}/pipeline/utils/GitUtils.groovy")
 			
 			Logger.debug("Entering PR Builder")
