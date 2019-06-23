@@ -131,10 +131,11 @@ node(NODE_LABEL)
 		try 
 
 		{
+			checkout scm
 			def currentDir
+			currentDir = pwd()
 			Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
 			println("HI")
-			checkout scm
 			println("Reading modules.properties : $Logger")
 			GitUtils = load("${currentDir}/pipeline/utils/GitUtils.groovy")
 			
@@ -147,8 +148,6 @@ node(NODE_LABEL)
 			stageName = "Git clone and Setup"
 
 			moduleProp = readProperties file: 'pipeline/properties/modules.properties'
-
-			currentDir = pwd()
 
 			MiscUtils = load("${currentDir}/pipeline/utils/MiscUtils.groovy")
 
