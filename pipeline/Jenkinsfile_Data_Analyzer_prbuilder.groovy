@@ -135,11 +135,11 @@ node(NODE_LABEL)
 			
 			println("HI")
 						
-			def Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
+			Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
 	
 			GitUtils = load("${currentDir}/pipeline/utils/GitUtils.groovy")
 			
-			Logger=Logger.info("Entering PR Builder")
+			Logger.info("Entering PR Builder")
 
 			Logger.info("Build trigger by $ghprbTriggerAuthor using comment $ghprbCommentBody")
 
