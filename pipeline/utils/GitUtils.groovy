@@ -1,7 +1,5 @@
 #!groovy
 
-import groovy.json.JsonSlurper
-
 def checkoutCommitHash() {
     checkout scm
     if(!env.BUILD_COMMIT_HASH) {
@@ -15,30 +13,29 @@ def getCommitHash() {
     return gitCommit
 }
 
-/*
 def mergePrToMaster(prNum, prBranch) {
     sshagent([GIT_AUTH]) {
-        sh """ git config --global user.email "***" """
-        sh """ git config --global user.name "****" """
+        sh """ git config --global user.email "rameshrangaswamy1@gmail.com" """
+        sh """ git config --global user.name "rameshrangaswamy" """
         sh "git fetch origin"
         sh "git checkout master"
         sh """ git merge --no-ff -m "Merge pull request #$prNum from $prBranch" origin/$prBranch """
         sh "git push origin master"
     }
-}*/
+}
 
 // To checkout desired repo and branch
 def gitCheckout(String repo, String buildBranch, String targetDir = repo)
 {
-	checkout([$class: 'GitSCM',
-	branches: [[name: buildBranch]],
-	doGenerateSubmoduleConfigurations: false,
-	extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: targetDir]],
-	submoduleCfg: [],
-	userRemoteConfigs: [[credentialsId: 'ramesh-testpipelineadmin',
-	refspec: '+refs/heads/*:refs/remotes/origin/*',
-	url: 'git@github.com:' + repo + '.git']]
-	])
+checkout([$class: 'GitSCM',
+branches: [[name: buildBranch]],
+doGenerateSubmoduleConfigurations: false,
+extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: targetDir]],
+submoduleCfg: [],
+userRemoteConfigs: [[credentialsId: 'rameshrangaswamy',
+refspec: '+refs/heads/*:refs/remotes/origin/*',
+url: 'git@github.com:' + repo + '.git']]
+])
 }
 
 /** Method to update PR Status in GIT */
@@ -57,3 +54,6 @@ url: "${CjpConstants.GITHUB_STATUS_URL}/${ghprbGhRepository}/statuses/${commitId
         println("Build status update status: " + response.status + ", response: " + response.content)
     }
 }
+
+
+return this;
