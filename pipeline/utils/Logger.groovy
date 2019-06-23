@@ -1,9 +1,6 @@
-
 /**
  * Centralized logging
  */
- 
-@NonCPS
 def info(String message) {
     echo "INFO: ${message}"
 }
@@ -16,3 +13,5 @@ def debug(String message) {
     if (env.DEBUG)
         echo "DEBUG: ${message}"
 }
+
+return this;

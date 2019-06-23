@@ -3,21 +3,15 @@
 //analyzer/pipeline-scripts/Jenkinsfile_Data_Analyzer_prbuilder.groovy
 
 /**
-
  * This script is triggered for PR Builder
-
  * It is invoked by specific comment issued by user on PRs
-
  * Comments for this script is "DATA_VALIDATE"
-
  * Identifies the changes in the PR and performs validations for the same
-
 */
 
 
 
-@Library('CJPtestingpipeline') pipelineLibrary
-
+//@Library("ccc-pipeline-utils") _
 
 
 def checkoutCommitHash() {
@@ -79,12 +73,11 @@ url: "${Constants.GITHUB_STATUS_URL}/${ghprbGhRepository}/statuses/${commitId}"
 
 //logger methods
 
-import io.CJPtestingpipeline.pipeline.utils.Logger
+//import Logger
 
 /**
  * Centralized logging
  */
-
 
 
 //import Constants
@@ -107,21 +100,8 @@ class Constants {
 node(NODE_LABEL) 
 {
 
-	//def GitUtils
-	
-	def Logger = new Logger()
 
-	Logger.info("Entering PR Builder")
-
-	
-
-	Logger.info("Build trigger by $ghprbTriggerAuthor using comment $ghprbCommentBody")
-
-	def mavenHome = tool(name: 'maven-3.5.0', type: 'maven');
-
-	def antHome = tool(name: 'ant-1.9.6', type: 'ant');
-
-	
+	def mavenHome = tool 'maven'
 
 	final String buildNum = currentBuild.number.toString()
 
@@ -134,6 +114,11 @@ node(NODE_LABEL)
 	def MiscUtils
 
 	def packagePathMap
+	
+	def Logger
+	
+	def GitUtils
+	
 
 		
 
@@ -146,16 +131,23 @@ node(NODE_LABEL)
 		try 
 
 		{
+			checkout scm
+			def currentDir
+			currentDir = pwd()
+			Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
+			println("HI")
+			println("Reading modules.properties : $Logger")
+			GitUtils = load("${currentDir}/pipeline/utils/GitUtils.groovy")
+			
+			logger = Logger.info("Entering PR Builder")
+
+			Logger.info("Build trigger by $ghprbTriggerAuthor using comment $ghprbCommentBody")
 
 			Logger.info("Entering Git Clone and setup stage")
 
 			stageName = "Git clone and Setup"
 
-			checkout scm
-
 			moduleProp = readProperties file: 'pipeline/properties/modules.properties'
-
-			currentDir = pwd()
 
 			MiscUtils = load("${currentDir}/pipeline/utils/MiscUtils.groovy")
 
@@ -232,11 +224,8 @@ node(NODE_LABEL)
 	
 
 	/**
-
 	* Setting up Maven Environment for build and UT stage
-
 	* Stage to run UT's for changed modules
-
 	*/
 
 	
