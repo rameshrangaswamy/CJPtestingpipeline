@@ -1,17 +1,18 @@
 /**
  * Centralized logging
  */
-def info(String message) {
-    echo "INFO: ${message}"
+def logger(){
+info(String) {
+    echo "INFO: ${message}";
 }
 
-def error(String message) {
-    echo "WARNING: ${message}"
+error(String) {
+    echo "WARNING: ${message}";
 }
 
-def debug(String message) {
+debug(String) {
     if (env.DEBUG)
-        echo "DEBUG: ${message}"
+        echo "DEBUG: ${message}";
 }
-
+}
 return this;
