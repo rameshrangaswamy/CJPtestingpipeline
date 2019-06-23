@@ -13,7 +13,7 @@
 
 //@Library("ccc-pipeline-utils") _
 
-import java.util.logging.Logger
+
 
 def checkoutCommitHash() {
     checkout scm
@@ -135,7 +135,7 @@ node(NODE_LABEL)
 			
 			println("HI")
 						
-			//Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
+			Logger = load("${currentDir}/pipeline/utils/Logger.groovy")
 	
 			GitUtils = load("${currentDir}/pipeline/utils/GitUtils.groovy")
 			
