@@ -47,7 +47,7 @@ def updatePrStatus(context, status, commitId=ghprbActualCommit) {
     }"""
     withCredentials([string(credentialsId: 'rameshrangaswamyadmin', variable: 'SECRET')]) {
         def response = httpRequest consoleLogResponseBody: true,
-                customHeaders: [[name: 'Authorization', value: "token ${SECRET}"]],
+                customHeaders: [[name: 'Authorization', value: "token ${GitLab API token}"]],
                 httpMode: 'POST', requestBody: payload,
 url: "${CjpConstants.GITHUB_STATUS_URL}/${ghprbGhRepository}/statuses/${commitId}"
 
