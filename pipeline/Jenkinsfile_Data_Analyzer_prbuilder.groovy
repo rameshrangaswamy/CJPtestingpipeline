@@ -36,8 +36,8 @@ def getCommitHash() {
 /*
 def mergePrToMaster(prNum, prBranch) {
     sshagent([GIT_AUTH]) {
-        sh """ git config --global user.email "sunlight.gen@cisco.com" """
-        sh """ git config --global user.name "sunlight.gen" """
+        sh """ git config --global user.email "***" """
+        sh """ git config --global user.name "****" """
         sh "git fetch origin"
         sh "git checkout master"
         sh """ git merge --no-ff -m "Merge pull request #$prNum from $prBranch" origin/$prBranch """
