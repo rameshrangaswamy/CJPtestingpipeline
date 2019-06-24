@@ -55,14 +55,11 @@ def updatePrStatus(context, status, commitId=ghprbActualCommit) {
     withCredentials([ usernamePassword(credentialsId: "Dummmy", usernameVariable: 'USER', passwordVariable: 'PASS')])
 
 							{
-
-								
-
 								def auth_key = "${USER}:${PASS}"
 
 								def auth_encoded = auth_key.bytes.encodeBase64().toString()
 
-								response = httpRequest consoleLogResponseBody: true,
+								def response = httpRequest consoleLogResponseBody: true,
 
 									customHeaders: [[name: 'Authorization', value: "Basic ${auth_encoded}"]],
 
