@@ -55,8 +55,8 @@ def updatePrStatus(context, status, commitId=ghprbActualCommit) {
     withCredentials([ usernamePassword(credentialsId: "Dummmy", usernameVariable: 'USER', passwordVariable: 'PASS')])
 
 							{
-								def Username = ${USER}
-								def Password = ${PASS}
+								def Username = "${USER}"
+								def Password = "${PASS}"
 								
 								println(Username)
 								/*def auth_key = "${USER}:${PASS}"
