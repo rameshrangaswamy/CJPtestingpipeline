@@ -61,7 +61,7 @@ def buildInfo
 				}
 			}
 		}
-	/*
+	
 		stage('sonarAnalysis')
 		{       
 			for(module in currentModules)
@@ -99,7 +99,41 @@ def buildInfo
 				}
 			}
 		}
-		stage('Artifactory Configuration') 
+		
+		stage('Deployment')
+		{
+			println("Entering stage Publish to Artifactory")
+			currentDir = pwd()
+			CjpArtifactoryUtils = load("${currentDir}/pipeline-scripts/utils/CjpArtifactoryUtils.groovy")
+			CjpConstants = load("${currentDir}/pipeline-scripts/utils/CjpConstants.groovy")
+			MiscUtils = load("${currentDir}/pipeline-scripts/utils/MiscUtils.groovy")
+			moduleProp = readProperties file: 'pipeline-scripts/properties/modules.properties'				
+			def packageNames = moduleProp['PACKAGE_NAME']
+			packageMap = MiscUtils.stringToMap(packageNames)
+			tarPath = moduleProp['TAR_PATH']
+			def tarPathMap = MiscUtils.stringToMap(tarPath)
+						for(module in currentModules) 
+						{
+						def packageName = MiscUtils.getValueFromMap(packageMap,module)
+						def moduleTarPath = MiscUtils.getTarPath(tarPathMap,module)	
+						println("packageName : $packageName")
+						dir(moduleTarPath)
+						{
+							sh"""
+							#!/bin/bash
+							
+							//sshpass -p "12345" scp target/simple-web-app.war qatest@172.17.0.2:/root/devops/apache-tomcat-8.5.34/webapps /
+							sudo sshpass -p "12345" scp /home/rameshrangaswamy1/.jenkins/workspace/PR_PHASE_1/sau-jen/target/sau-0.0.1-SNAPSHOT.war  rameshrangaswamy1@34.93.202.223:/home/rameshrangaswamy1/
+							
+							sudo sshpass -p "12345" ssh rameshrangasway1@34.93.202.223 "JAVA_HOME=/usr/lib/jvm/java-8-oracle" "/home/rameshrangaswamy1/apache-tomcat-8.5.37/bin/startup.sh"
+
+							"""
+						}
+					}
+		}
+		
+		
+		stage('Publish to Artifactory') 
 		{
 				println("Entering stage Publish to Artifactory")
 				currentDir = pwd()
@@ -149,5 +183,5 @@ def buildInfo
 					//CjpArtifactoryUtils.publishCcOneAppPackageMaster(CjpConstants.ARTIFACTORY_REPO, packageName, buildNum)
 						
 			}
-		}*/
+		}
 }
