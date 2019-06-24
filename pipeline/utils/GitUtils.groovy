@@ -52,9 +52,9 @@ def updatePrStatus(context, status, commitId=ghprbActualCommit) {
         "target_url": "${currentBuild.absoluteUrl}",
         "context": "$context"
     }"""
-    withCredentials([usernamePassword(credentialsId: 'Gideal', passwordVariable: 'Amma@789', usernameVariable: 'rameshrangaswamy1@gmail.com')]) {
-        def auth_key = "rameshrangaswamy1@gmail.com:$Amma@789"
-		def auth_encoded = auth_key.bytes.encodeBase64().toString()
+withCredentials([string(credentialsId: 'ragvadla-testpipelineadmin', variable: 'GITHUB_TOKEN')]) {
+        def response = httpRequest consoleLogResponseBody: true,
+                customHeaders: [[name: 'Authorization', value: "token ${GITHUB_TOKEN}"]],
         def response = httpRequest consoleLogResponseBody: true,
                 customHeaders: [[name: 'Authorization', value: "Basic ${auth_encoded}"]],
                 httpMode: 'POST', requestBody: payload,
