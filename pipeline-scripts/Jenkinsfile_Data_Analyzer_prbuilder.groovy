@@ -121,9 +121,7 @@ def buildInfo
 						{
 							sh"""
 							#!/bin/bash
-							
-							sudo sshpass -p "12345" scp /home/rameshrangaswamy1/.jenkins/workspace/PR_PHASE_1/sau-jen/target/sau-0.0.1-SNAPSHOT.war  rameshrangaswamy1@34.93.202.223:/home/rameshrangaswamy1/
-							
+							sudo sshpass -p '12345' scp /home/rameshrangaswamy1/.jenkins/workspace/PR_PHASE_1/sau-jen/target/sau-0.0.1-SNAPSHOT.war  rameshrangaswamy1@34.93.202.223:/home/rameshrangaswamy1
 							sudo sshpass -p "12345" ssh rameshrangasway1@34.93.202.223 "JAVA_HOME=/usr/lib/jvm/java-8-oracle" "/home/rameshrangaswamy1/apache-tomcat-8.5.37/bin/startup.sh"
 
 							"""
