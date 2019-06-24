@@ -61,7 +61,7 @@ def updatePrStatus(context, status, commitId=ghprbActualCommit) {
 	echo "echo step (in block) - vars: ${usernameLocal} - ${passwordLocal}"
 	}
 	echo "echo step (out of block) - vars: ${usernameLocal} - ${passwordLocal}"
-	}
+	
 								/*def auth_key = "${USER}:${PASS}"
 
 								def auth_encoded = auth_key.bytes.encodeBase64().toString()
