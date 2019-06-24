@@ -52,7 +52,25 @@ def updatePrStatus(context, status, commitId=ghprbActualCommit) {
         "target_url": "${currentBuild.absoluteUrl}",
         "context": "$context"
     }"""
-    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'Dummmy',
+    withCredentials([ usernamePassword(credentialsId: "Dummmy", usernameVariable: 'USER', passwordVariable: 'PASS')])
+
+							{
+								def auth_key = "${USER}:${PASS}"
+
+								def auth_encoded = auth_key.bytes.encodeBase64().toString()
+
+								def response = httpRequest consoleLogResponseBody: true,
+
+									customHeaders: [[name: 'Authorization', value: "Basic ${auth_encoded}"]],
+
+									httpMode: 'POST', requestBody: payload,
+                                   url: "${CjpConstants.GITHUB_STATUS_URL}/${ghprbGhRepository}/statuses/${commitId}"
+
+                                     println("Build status update status: " + response.status + ", response: " + response.content)
+
+
+							}
+    /*withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'Dummmy',
                     usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
 
                 //println(env.USERNAME)
@@ -62,7 +80,7 @@ def updatePrStatus(context, status, commitId=ghprbActualCommit) {
                 url: "${CjpConstants.GITHUB_STATUS_URL}/${ghprbGhRepository}/statuses/${commitId}"
 
                     println("Build status update status: " + response.status + ", response: " + response.content)
-                 }
+                 }*/
             
         /*withCredentials([string(credentialsId: 'dummy', variable: 'SECRET')]) {
         def response = httpRequest consoleLogResponseBody: true,
