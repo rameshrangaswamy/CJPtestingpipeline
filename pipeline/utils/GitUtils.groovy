@@ -52,15 +52,14 @@ def updatePrStatus(context, status, commitId=ghprbActualCommit) {
         "target_url": "${currentBuild.absoluteUrl}",
         "context": "$context"
     }"""
-	def usernameLocal, passwordLocal
-	withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'Dummmy', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME']]) {
-	echo "echo step - env: ${env.USERNAME} - password through ${env.PASSWORD}"
-	sh 'echo "sh step - echo: ${USERNAME} - ${PASSWORD}"'
-	usernameLocal = env.USERNAME
-	passwordLocal = env.PASSWORD
-	echo "echo step (in block) - vars: ${usernameLocal} - ${passwordLocal}"
-	}
-	echo "echo step (out of block) - vars: ${usernameLocal} - ${passwordLocal}"
+withCredentials([string(credentialsId: 'Dummy', variable: 'GITHUB_TOKEN')]) {
+def response = httpRequest consoleLogResponseBody: true,
+customHeaders: [[name: 'Authorization', value: "token ${GITHUB_TOKEN}"]],
+httpMode: 'POST', requestBody: payload,
+url: "${CjpConstants.GITHUB_STATUS_URL}/${ghprbGhRepository}/statuses/${commitId}"
+
+println("Build status update status: " + response.status + ", response: " + response.content)
+}
 	
 								/*def auth_key = "${USER}:${PASS}"
 
