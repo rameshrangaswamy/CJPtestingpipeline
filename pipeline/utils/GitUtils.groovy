@@ -52,13 +52,16 @@ def updatePrStatus(context, status, commitId=ghprbActualCommit) {
         "target_url": "${currentBuild.absoluteUrl}",
         "context": "$context"
     }"""
-    withCredentials([ usernamePassword(credentialsId: "Dummmy", usernameVariable: 'USER', passwordVariable: 'PASS')])
-
-							{
-								def Username = "${USER}"
-								def Password = "${PASS}"
-								
-								println(Username)
+	def usernameLocal, passwordLocal
+	withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'Dummmy', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME']]) {
+	echo "echo step - env: ${env.USERNAME} - password through ${env.PASSWORD}"
+	sh 'echo "sh step - echo: ${USERNAME} - ${PASSWORD}"'
+	usernameLocal = env.USERNAME
+	passwordLocal = env.PASSWORD
+	echo "echo step (in block) - vars: ${usernameLocal} - ${passwordLocal}"
+	}
+	echo "echo step (out of block) - vars: ${usernameLocal} - ${passwordLocal}"
+	}
 								/*def auth_key = "${USER}:${PASS}"
 
 								def auth_encoded = auth_key.bytes.encodeBase64().toString()
@@ -73,7 +76,7 @@ def updatePrStatus(context, status, commitId=ghprbActualCommit) {
                                      println("Build status update status: " + response.status + ", response: " + response.content)*/
 
 
-							}
+							
     /*withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'Dummmy',
                     usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
 
