@@ -60,4 +60,3 @@ url: "${CjpConstants.GITHUB_STATUS_URL}/${ghprbGhRepository}/statuses/${commitId
 println("Build status update status: " + response.status + ", response: " + response.content)
 }
 }
-return this;
