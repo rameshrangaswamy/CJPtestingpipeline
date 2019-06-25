@@ -54,7 +54,7 @@ def updatePrStatus(context, status, commitId=ghprbActualCommit) {
     }"""
 withCredentials([usernamePassword(credentialsId: 'sashank', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
 def response = httpRequest consoleLogResponseBody: true,
-customHeaders: [[name: 'Authorization', value: "token ${GITHUB_TOKEN}"]],
+customHeaders: [[name: 'Authorization', value: "token ${PASS}"]],
 httpMode: 'POST', requestBody: payload,
 url: "${CjpConstants.GITHUB_STATUS_URL}/${ghprbGhRepository}/statuses/${commitId}"
 println("Build status update status: " + response.status + ", response: " + response.content)
