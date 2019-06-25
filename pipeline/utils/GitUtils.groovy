@@ -52,49 +52,12 @@ def updatePrStatus(context, status, commitId=ghprbActualCommit) {
         "target_url": "${currentBuild.absoluteUrl}",
         "context": "$context"
     }"""
-withCredentials([string(credentialsId: 'sashank', variable: 'GITHUB_TOKEN')]) {
+withCredentials([usernamePassword(credentialsId: 'sashank', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
 def response = httpRequest consoleLogResponseBody: true,
 customHeaders: [[name: 'Authorization', value: "token ${GITHUB_TOKEN}"]],
 httpMode: 'POST', requestBody: payload,
 url: "${CjpConstants.GITHUB_STATUS_URL}/${ghprbGhRepository}/statuses/${commitId}"
-
 println("Build status update status: " + response.status + ", response: " + response.content)
 }
-	
-								/*def auth_key = "${USER}:${PASS}"
-
-								def auth_encoded = auth_key.bytes.encodeBase64().toString()
-
-								def response = httpRequest consoleLogResponseBody: true,
-
-									customHeaders: [[name: 'Authorization', value: "Basic ${auth_encoded}"]],
-
-									httpMode: 'POST', requestBody: payload,
-                                   url: "${CjpConstants.GITHUB_STATUS_URL}/${ghprbGhRepository}/statuses/${commitId}"
-
-                                     println("Build status update status: " + response.status + ", response: " + response.content)*/
-
-
-							
-    /*withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'Dummmy',
-                    usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-
-                //println(env.USERNAME)
-                     def response = httpRequest consoleLogResponseBody: true,
-                     customHeaders: [[name: 'Authorization', value: "token ${SECRET}"]],
-                httpMode: 'POST', requestBody: payload,
-                url: "${CjpConstants.GITHUB_STATUS_URL}/${ghprbGhRepository}/statuses/${commitId}"
-
-                    println("Build status update status: " + response.status + ", response: " + response.content)
-                 }*/
-            
-        /*withCredentials([string(credentialsId: 'dummy', variable: 'SECRET')]) {
-        def response = httpRequest consoleLogResponseBody: true,
-                customHeaders: [[name: 'Authorization', value: "token ${SECRET}"]],
-                httpMode: 'POST', requestBody: payload,
-url: "${CjpConstants.GITHUB_STATUS_URL}/${ghprbGhRepository}/statuses/${commitId}"
-
-        println("Build status update status: " + response.status + ", response: " + response.content)
-    }*/
 }
 return this;
