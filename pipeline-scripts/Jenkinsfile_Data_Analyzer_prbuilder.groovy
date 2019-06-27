@@ -2,7 +2,7 @@
 
 /** provide comment as TRIALTEST to trigger this job */
 
-/** Specifying node on which current build would run */
+//** Specifying node on which current build would run */
 
 node("NODE_LABEL") 
 
