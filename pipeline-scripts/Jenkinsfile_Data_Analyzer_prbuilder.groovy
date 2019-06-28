@@ -99,7 +99,7 @@ def buildInfo
 				}
 			}
 		}
-		
+		/*
 		stage('Deployment')
 		{
 			println("Entering stage Publish to Artifactory")
@@ -126,7 +126,7 @@ def buildInfo
 							"""
 						}
 					}
-		}
+		}*/
 		
 		
 		stage('Publish to Artifactory') 
