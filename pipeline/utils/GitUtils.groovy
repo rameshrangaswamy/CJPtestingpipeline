@@ -51,11 +51,14 @@ def updatePrStatus(context, status, commitId=ghprbActualCommit) {
         "target_url": "${currentBuild.absoluteUrl}",
         "context": "$context"
     }"""
-    withCredentials([string(credentialsId: 'ramadmintest', variable: 'GITHUB_TOKEN')]) {
+withCredentials([usernamePassword(credentialsId: "sashank", usernameVariable: 'USER', passwordVariable: 'PASS')])
+				{
+					def auth_key = "${USER}:${PASS}"
+					def auth_encoded = auth_key.bytes.encodeBase64().toString()
         def response = httpRequest consoleLogResponseBody: true,
                 customHeaders: [[name: 'Authorization', value: "token ${GITHUB_TOKEN}"]],
                 httpMode: 'POST', requestBody: payload,
-url: "${CjpConstants.GITHUB_STATUS_URL}/${ghprbGhRepository}/statuses/${commitId}"
+url: "https://github.com/api/v4/repos/${ghprbGhRepository}/statuses/${commitId}"
         
 println("Build status update status: " + response.status + ", response: " + response.content)
     }
