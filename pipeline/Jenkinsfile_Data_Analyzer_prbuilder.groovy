@@ -34,6 +34,8 @@ node(NODE_LABEL)
 	
 	def GitUtils
 	
+	def CjpConstants
+	
 			
 
 	/** Stage to clone repo from git and setup environment for build */
@@ -48,8 +50,6 @@ node(NODE_LABEL)
 			checkout scm
 			
 			def currentDir
-			
-			def CjpConstants
 			
 			currentDir = pwd()
 			
