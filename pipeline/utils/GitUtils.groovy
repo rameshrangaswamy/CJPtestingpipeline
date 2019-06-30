@@ -53,10 +53,10 @@ def updatePrStatus(context, status, commitId=ghprbActualCommit) {
     }"""
 withCredentials([usernamePassword(credentialsId: "sashank", usernameVariable: 'USER', passwordVariable: 'PASS')])
 				{
-					def auth_key = "${USER}:${PASS}"
-					def auth_encoded = auth_key.bytes.encodeBase64().toString()
-        def response = httpRequest consoleLogResponseBody: true,
-                customHeaders: [[name: 'Authorization', value: "token ${GITHUB_TOKEN}"]],
+		def auth_key = "${USER}:${PASS}"
+		def auth_encoded = auth_key.bytes.encodeBase64().toString()
+		response = httpRequest consoleLogResponseBody: true,
+		customHeaders: [[name: 'Authorization', value: "Basic ${auth_encoded}"]],
                 httpMode: 'POST', requestBody: payload,
 url: "https://github.com/api/v4/repos/${ghprbGhRepository}/statuses/${commitId}"
         
