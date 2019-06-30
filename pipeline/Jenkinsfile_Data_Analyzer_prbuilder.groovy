@@ -110,6 +110,8 @@ node(NODE_LABEL)
 			Logger.info("Service modules changed : $currentModules")
 
 			MiscUtils.setDisplayName(buildNum, currentModules)
+			
+			Logger.info("$status + ${currentBuild.absoluteUrl} + $context")
 
 
 			GitUtils.updatePrStatus(stageName,"success",commitHash)			
