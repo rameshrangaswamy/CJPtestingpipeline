@@ -38,6 +38,8 @@ node(NODE_LABEL)
 	
 	def status
 	
+	def context 
+	
 			
 
 	/** Stage to clone repo from git and setup environment for build */
