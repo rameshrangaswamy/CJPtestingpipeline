@@ -58,7 +58,7 @@ withCredentials([usernamePassword(credentialsId: "sashank", usernameVariable: 'U
 		response = httpRequest consoleLogResponseBody: true,
 		customHeaders: [[name: 'Authorization', value: "Basic ${auth_encoded}"]],
                 httpMode: 'POST', requestBody: payload,
-url: "https://github.com/${ghprbGhRepository}/statuses/${commitId}"
+url: "https://github.com/CJPtestingpipeline/statuses/${commitId}"
         
 println("Build status update status: " + response.status + ", response: " + response.content)
     }
