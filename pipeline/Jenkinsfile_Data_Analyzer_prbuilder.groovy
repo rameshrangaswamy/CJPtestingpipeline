@@ -36,6 +36,8 @@ node(NODE_LABEL)
 	
 	def CjpConstants
 	
+	def status
+	
 			
 
 	/** Stage to clone repo from git and setup environment for build */
